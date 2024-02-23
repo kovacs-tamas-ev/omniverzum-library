@@ -11,13 +11,7 @@ export class UserController {
 
     @Post('create')
     async createUser(@Body() userData: CreateUserDto): Promise<void> {
-        console.log('-- user data --\n', userData);
         this.userService.createUser(userData);
-    }
-
-    @Get('find-all')
-    async findAllUsers() {
-        this.userService.findAllUsers();
     }
 
     @Post('find')

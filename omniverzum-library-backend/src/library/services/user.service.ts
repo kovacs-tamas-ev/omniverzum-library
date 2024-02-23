@@ -6,6 +6,7 @@ import { CreateUserDto } from "../models/user/create-user.dto";
 import { FilterUserDto } from "../models/user/filter-user.dto";
 import { UserDto } from "../models/user/user.dto";
 import { User } from "../schemas/user.schema";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -15,14 +16,11 @@ export class UserService {
     }
 
     async createUser(userData: CreateUserDto): Promise<void> {
-        const newUser = new this.userModel(userData);
-        newUser.save();
-    }
-
-    async findAllUsers(): Promise<UserDto[]> {
-        const resultDocs = await this.userModel.find().exec();
-        const resultObjects = resultDocs.map(doc => doc.toObject());
-        return mapAllToClass(UserDto, resultObjects);
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        const userDataToSave = {  ...userData, password: hashedPassword };
+        
+        const newUser = new this.userModel(userDataToSave);
+        await newUser.save();
     }
 
     async findUsers(filters?: FilterUserDto): Promise<UserDto[]> {

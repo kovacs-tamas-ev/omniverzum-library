@@ -4,7 +4,6 @@ import { Types } from "mongoose";
 @Schema()
 export class User {
 
-    @Prop({ type: Types.ObjectId, auto: true })
     _id: Types.ObjectId;
     
     @Prop({ unique: true, required: true })
