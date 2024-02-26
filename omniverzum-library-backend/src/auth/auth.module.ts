@@ -8,6 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtSecretOrKey } from './constants';
 import { BasicJwtStrategy } from './strategies/basic-jwt.strategy';
 import { AdminJwtStrategy } from './strategies/admin-jwt-strategy';
+import { BasicJwtGuard } from './guards/basic-jwt.guard';
+import { AdminJwtGuard } from './guards/admin-jwt-guard';
 
 @Module({
     imports: [
@@ -24,6 +26,7 @@ import { AdminJwtStrategy } from './strategies/admin-jwt-strategy';
           })      
     ],
     controllers: [AuthController],
-    providers: [AuthService, BasicJwtStrategy, AdminJwtStrategy]
+    providers: [AuthService, BasicJwtStrategy, AdminJwtStrategy, BasicJwtGuard, AdminJwtGuard],
+    exports: [BasicJwtGuard, AdminJwtGuard]
 })
 export class AuthModule {}
