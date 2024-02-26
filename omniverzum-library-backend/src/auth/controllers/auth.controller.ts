@@ -3,7 +3,7 @@ import { AuthService } from "../services/auth.service";
 import { AuthPayloadDto } from "../models/auth-payload.dto";
 import { customValidationPipe } from "src/library/exception-filters/custom-exception-factory";
 import { ServerException } from "src/library/models/general/server-exception";
-import { JwtGuard } from "../guards/jwt.guard";
+import { BasicJwtGuard } from "../guards/basic-jwt.guard";
 import { Request } from 'express';
 
 @Controller('auth')
@@ -24,10 +24,8 @@ export class AuthController {
     }
 
     @Get('/test')
-    @UseGuards(JwtGuard)
+    @UseGuards(BasicJwtGuard)
     test(@Req() request: Request) {
-        console.log('req user\n', request.user);
-        
         return 'sikeres volt';
     }
 
