@@ -4,5 +4,6 @@ export class UserDto {
     username: string = undefined;
     fullName: string = undefined;
     email: string = undefined;
+    admin: boolean = undefined;
 
 }

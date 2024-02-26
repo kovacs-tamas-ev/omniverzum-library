@@ -11,5 +11,6 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'Az email cím nem lehet üres' })
     @IsEmail({}, { message: 'Nem megfelelő email formátum' })
     email: string = undefined;
+    admin?: boolean = undefined;
 
 }

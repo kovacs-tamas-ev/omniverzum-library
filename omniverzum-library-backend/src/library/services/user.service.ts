@@ -7,6 +7,7 @@ import { FilterUserDto } from "../models/user/filter-user.dto";
 import { UserDto } from "../models/user/user.dto";
 import { User } from "../schemas/user.schema";
 import * as bcrypt from 'bcrypt';
+import { isString } from "class-validator";
 
 @Injectable()
 export class UserService {
@@ -30,7 +31,11 @@ export class UserService {
             const mappedFilters = mapToClass(FilterUserDto, filters);
             Object.keys(mappedFilters).forEach(key => {
                 if (mappedFilters[key] !== null && mappedFilters[key] !== undefined) {
-                    filterQuery[key] = { $regex: new RegExp(mappedFilters[key], 'i') };
+                    if (isString(mappedFilters[key])) {
+                        filterQuery[key] = { $regex: new RegExp(mappedFilters[key], 'i') };
+                    } else {
+                        filterQuery[key] = mappedFilters[key];
+                    }
                 }
             });
     
