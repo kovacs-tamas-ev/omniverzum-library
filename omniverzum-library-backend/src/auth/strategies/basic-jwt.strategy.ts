@@ -9,23 +9,29 @@ import { ServerException } from "src/library/models/general/server-exception";
 export class BasicJwtStrategy extends PassportStrategy(Strategy) {
 
     constructor() {
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
-            secretOrKey: jwtSecretOrKey
-        });
+        super(basicJwtStrategyConfig);
     }
 
-    validate(userData: UserDto): any {
-        const userDataKeys = Object.keys(new UserDto()).concat(['exp', 'iat']).sort();
-        const givenDataKeys = Object.keys(userData).sort();
-        const areTheSameKeys = userDataKeys.join(',') === givenDataKeys.join(',');
-
-        if (!areTheSameKeys) {
-            throw new ServerException({ message: 'A kéréshez jelentkezzen be' });
-        }
-
-        return userData;
+    validate(userData: UserDto): UserDto {
+        return basicJwtValidate(userData);
     }
 
+}
+
+export const basicJwtStrategyConfig = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    ignoreExpiration: false,
+    secretOrKey: jwtSecretOrKey
+};
+
+export function basicJwtValidate(userData: UserDto): UserDto {
+    const userDataKeys = Object.keys(new UserDto()).concat(['exp', 'iat']).sort();
+    const givenDataKeys = Object.keys(userData).sort();
+    const areTheSameKeys = userDataKeys.join(',') === givenDataKeys.join(',');
+
+    if (!areTheSameKeys) {
+        throw new ServerException({ message: 'A kéréshez jelentkezzen be' });
+    }
+
+    return userData;
 }
