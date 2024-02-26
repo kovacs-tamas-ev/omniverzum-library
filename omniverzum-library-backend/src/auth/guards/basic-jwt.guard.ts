@@ -3,7 +3,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { ServerException } from "src/library/models/general/server-exception";
 
 @Injectable()
-export class BasicJwtGuard extends AuthGuard('jwt') {
+export class BasicJwtGuard extends AuthGuard('basic-jwt') {
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         try {

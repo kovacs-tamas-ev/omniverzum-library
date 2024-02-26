@@ -6,7 +6,7 @@ import { UserDto } from "src/library/models/user/user.dto";
 import { ServerException } from "src/library/models/general/server-exception";
 
 @Injectable()
-export class BasicJwtStrategy extends PassportStrategy(Strategy) {
+export class BasicJwtStrategy extends PassportStrategy(Strategy, 'basic-jwt') {
 
     constructor() {
         super(basicJwtStrategyConfig);
