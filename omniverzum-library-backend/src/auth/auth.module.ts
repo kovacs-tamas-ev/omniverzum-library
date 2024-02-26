@@ -5,6 +5,8 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { jwtSecretOrKey } from './constants';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
     imports: [
@@ -16,11 +18,11 @@ import { JwtModule } from '@nestjs/jwt';
           ]),
           PassportModule,      
           JwtModule.register({
-            secret: 'omniverzum-jwt-key',
+            secret: jwtSecretOrKey,
             signOptions: { expiresIn: '1h' }
           })      
     ],
     controllers: [AuthController],
-    providers: [AuthService]
+    providers: [AuthService, JwtStrategy]
 })
 export class AuthModule {}
