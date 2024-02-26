@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { FilterQuery, Model } from "mongoose";
+import mongoose, { FilterQuery, Model } from "mongoose";
 import { mapAllToClass, mapToClass } from "src/utils/mappers";
 import { CreateUserDto } from "../models/user/create-user.dto";
 import { FilterUserDto } from "../models/user/filter-user.dto";
@@ -8,13 +8,12 @@ import { UserDto } from "../models/user/user.dto";
 import { User } from "../schemas/user.schema";
 import * as bcrypt from 'bcrypt';
 import { isString } from "class-validator";
+import { ServerException } from "../models/general/server-exception";
 
 @Injectable()
 export class UserService {
 
-    constructor(@InjectModel(User.name) private userModel: Model<User>) {
-        
-    }
+    constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
     async createUser(userData: CreateUserDto): Promise<void> {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -47,6 +46,19 @@ export class UserService {
         const resultDocs = await this.userModel.find(filterQuery).exec();
         const resultObjects = resultDocs.map(doc => doc.toObject());
         return mapAllToClass(UserDto, resultObjects);
+    }
+
+    async setAdminState(userId: string, newAdminState: boolean): Promise<void> {
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            throw new ServerException({ message: 'Érvénytelen felhasználó azonosító' });
+        }
+
+        const existingUser = await this.userModel.findOne({ _id: userId });
+        if (!existingUser) {
+            throw new ServerException({ message: 'A felhasználó nem található' });
+        }
+
+        await this.userModel.updateOne({ _id: userId }, { $set: { admin: newAdminState } });
     }
     
 
