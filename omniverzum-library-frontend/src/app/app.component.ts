@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -10,4 +11,9 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'Omniverzum-könyvtár';
+
+  constructor(private http: HttpClient) {
+    this.http.post('/api/auth/login', { username: 'username', password: 'password' }).subscribe();
+  }
+
 }
