@@ -1,8 +1,14 @@
-import { Body, Controller, Post, UseGuards, UsePipes } from "@nestjs/common";
+import { Body, Controller, Post, Req, UseGuards, UsePipes } from "@nestjs/common";
+import { Request } from 'express';
 import { AdminJwtGuard } from "src/auth/guards/admin-jwt-guard";
+import { BasicJwtGuard } from "src/auth/guards/basic-jwt.guard";
+import { mapToClass } from "src/utils/mappers";
+import { hasEmptyStringField } from "src/utils/object-utils";
 import { customValidationPipe } from "../exception-filters/custom-exception-factory";
+import { ServerException } from "../models/general/server-exception";
 import { CreateUserDto } from "../models/user/create-user.dto";
 import { FilterUserDto } from "../models/user/filter-user.dto";
+import { ModifyOwnDataDto } from "../models/user/modify-own-data.dto";
 import { SetAdminStateDto } from "../models/user/set-admin-state.dto";
 import { UserDto } from "../models/user/user.dto";
 import { UserService } from "../services/user.service";
@@ -30,6 +36,18 @@ export class UserController {
     @UsePipes(customValidationPipe)
     async setAdminState(@Body() adminStateDto: SetAdminStateDto): Promise<void> {
         return this.userService.setAdminState(adminStateDto.userId, adminStateDto.newAdminState);
+    }
+
+    @Post('modify-own-data')
+    @UseGuards(BasicJwtGuard)
+    async modifyOwnData(@Req() request: Request, @Body() modifyOwnDataDto: ModifyOwnDataDto): Promise<void> {
+        const ownData = mapToClass(ModifyOwnDataDto, modifyOwnDataDto);
+        if (hasEmptyStringField(ownData)) {
+            throw new ServerException({ message: 'Hibásan megadott adatok, az üres string nem elfogadott' });
+        }
+
+        const ownUserData = request.user as UserDto;
+        return this.userService.modifyUserData(ownUserData._id, ownData);
     }
 
 }

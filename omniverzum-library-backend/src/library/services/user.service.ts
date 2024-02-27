@@ -1,14 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import mongoose, { FilterQuery, Model } from "mongoose";
-import { mapAllToClass, mapToClass } from "src/utils/mappers";
-import { CreateUserDto } from "../models/user/create-user.dto";
-import { FilterUserDto } from "../models/user/filter-user.dto";
-import { UserDto } from "../models/user/user.dto";
-import { User } from "../schemas/user.schema";
 import * as bcrypt from 'bcrypt';
 import { isString } from "class-validator";
+import { FilterQuery, Model } from "mongoose";
+import { mapAllToClass, mapToClass } from "src/utils/mappers";
+import { validateObjectId } from "src/utils/object-utils";
 import { ServerException } from "../models/general/server-exception";
+import { CreateUserDto } from "../models/user/create-user.dto";
+import { FilterUserDto } from "../models/user/filter-user.dto";
+import { ModifyOwnDataDto } from "../models/user/modify-own-data.dto";
+import { UserDto } from "../models/user/user.dto";
+import { User } from "../schemas/user.schema";
 
 @Injectable()
 export class UserService {
@@ -49,16 +51,28 @@ export class UserService {
     }
 
     async setAdminState(userId: string, newAdminState: boolean): Promise<void> {
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
-            throw new ServerException({ message: 'Érvénytelen felhasználó azonosító' });
-        }
-
+        validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
         const existingUser = await this.userModel.findOne({ _id: userId });
         if (!existingUser) {
             throw new ServerException({ message: 'A felhasználó nem található' });
         }
 
         await this.userModel.updateOne({ _id: userId }, { $set: { admin: newAdminState } });
+    }
+
+    async modifyUserData(userId: string, modifyOwnDataDto: ModifyOwnDataDto): Promise<void> {
+        validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
+        const existingUser = await this.userModel.findOne({ _id: userId });
+        if (!existingUser) {
+            throw new ServerException({ message: 'A felhasználó nem található' });
+        }
+
+        let ownDataToSave = modifyOwnDataDto;
+        if (modifyOwnDataDto.password) {
+            ownDataToSave = { ...modifyOwnDataDto, password: await bcrypt.hash(modifyOwnDataDto.password, 10) };
+        }
+
+        await this.userModel.updateOne({ _id: userId }, { $set: ownDataToSave });
     }
     
 
