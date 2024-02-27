@@ -9,7 +9,7 @@ export class AuthController {
 
     constructor(private authService: AuthService) {}
 
-    @Post('/login')
+    @Post('login')
     @UsePipes(customValidationPipe)
     async login(@Body() authPayloadDto: AuthPayloadDto) {
         const loginResponseDto = await this.authService.validateUser(authPayloadDto);
