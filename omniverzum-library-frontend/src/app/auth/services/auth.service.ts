@@ -12,21 +12,41 @@ export class AuthService {
 
   private userData?: UserDto;
   private token?: string;
+  private sessionStorageKey = 'omniverzum-token';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   async login(loginPayload: LoginPayloadDto): Promise<void> {
     const loginResponse = await firstValueFrom(this.http.post<LoginResponseDto>('/api/auth/login', loginPayload));
     this.userData = loginResponse.userData;
     this.token = loginResponse.token;
+    sessionStorage.setItem(this.sessionStorageKey, this.token);
+  }
+
+  async loadUserFromStoredTokenIfPresent(): Promise<boolean> {
+    const storedToken = sessionStorage.getItem(this.sessionStorageKey);
+    if (!storedToken) {
+      return false;
+    }
+
+    this.token = storedToken;
+    const ownData = await firstValueFrom(this.http.get<UserDto>('/api/auth/own-data'));
+    if (ownData) {
+      this.userData = ownData;
+      return true;
+    }
+
+    this.token = undefined;
+    return false;
   }
 
   logout(): void {
     this.userData = undefined;
     this.token = undefined;
+    sessionStorage.removeItem(this.sessionStorageKey);
   }
 
-  hasLoggedInUser(): boolean {
+  hasToken(): boolean {
     return this.token !== undefined;
   }
 

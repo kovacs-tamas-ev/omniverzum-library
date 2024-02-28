@@ -3,19 +3,14 @@
         <img id="header-logo" class="icon-button" src="assets/img/logo.png">
         <span id="header-title">Omniverzum - könyvtár</span>
     </div>
-    <!-- Home ikon -->
-    <!-- Cím -->
 
-
-    <div class="header-group" *ngIf="authService.hasLoggedInUser()">
+    <div class="header-group" *ngIf="authService.hasToken()">
         <span>
-            <i class="pi pi-user icon-button" pTooltip="Profil"></i>
+            <i class="pi pi-user icon-button"></i>
             <span>{{authService.getUserData()?.fullName}}</span>
         </span>
         <span>
-            <i id="logout-icon" class="pi pi-sign-out icon-button" (click)="logout()" pTooltip="Kijelentkezés"></i>
+            <i id="logout-icon" class="pi pi-sign-out icon-button" (click)="logout()"></i>
         </span>
     </div>
-    <!-- User profil ikon, mellette a user rendes neve -->
-    <!-- Kijelentkezés ikon -->
 </div>

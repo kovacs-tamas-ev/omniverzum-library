@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { TooltipModule } from 'primeng/tooltip';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth/services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, TooltipModule],
+  imports: [CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

@@ -5,11 +5,12 @@ import { AuthService } from '../auth/services/auth.service';
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   let reqToSend = req;
-  if (authService.hasLoggedInUser()) {
+
+  if (authService.hasToken()) {
     const token = authService.getToken()!;
     const headers = req.headers.set('Authorization', `Bearer ${token}`);
     reqToSend = req.clone({ headers });
   }
 
-  return next(req);
+  return next(reqToSend);
 };
