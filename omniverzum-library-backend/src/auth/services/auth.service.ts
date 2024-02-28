@@ -6,7 +6,8 @@ import { FilterQuery, Model } from "mongoose";
 import { UserDto } from "src/library/models/user/user.dto";
 import { User } from "src/library/schemas/user.schema";
 import { mapToClass } from "src/utils/mappers";
-import { AuthPayloadDto } from "../models/auth-payload.dto";
+import { LoginPayloadDto } from "../models/login-payload.dto";
+import { LoginResponseDto } from "../models/login-response.dto";
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
 
     }
 
-    async validateUser(authPayloadDto: AuthPayloadDto): Promise<any | null> {
+    async validateUser(authPayloadDto: LoginPayloadDto): Promise<LoginResponseDto | null> {
         const filterQuery = {} as FilterQuery<User>;
         filterQuery.username = authPayloadDto.username;
 
