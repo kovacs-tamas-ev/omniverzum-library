@@ -13,7 +13,14 @@ export class AppComponent {
   title = 'Omniverzum-könyvtár';
 
   constructor(private http: HttpClient) {
-    this.http.post('/api/auth/login', { username: 'username', password: 'password' }).subscribe();
+    this.http.post('/api/auth/login', { username: 'testUser3', password: 'password3' }).subscribe({
+      next: resp => {
+        console.log('-- in next --\n', resp);
+      },
+      error: error => {
+        console.log('-- in error --\n', error);
+      }
+    });
   }
 
 }
