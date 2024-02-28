@@ -1,0 +1,49 @@
+#header-row {
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--primary-color);
+    color: var(--primary-color-text);
+    font-weight: bold;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+#header-logo {
+    height: 2.8rem;
+}
+#header-title {
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+#logout-icon {
+    margin-left: 1rem;
+}
+
+.header-group {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    * {
+        margin-right: .5rem;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+.icon-button {
+    cursor: pointer;
+    padding: .3rem;
+    border-radius: 6px;
+    &:hover {
+        background-color: rgba(0, 0, 0, .2);
+    }
+    &:active {
+        background-color: rgba(0, 0, 0, .3);
+    }
+}

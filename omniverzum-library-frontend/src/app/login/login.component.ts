@@ -4,6 +4,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent {
 
   form!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.initForm();
   }
 
@@ -27,8 +28,9 @@ export class LoginComponent {
     });
   }
 
-  login() {
-    this.authService.login({ username: this.form.value.username, password: this.form.value.password });
+  async login() {
+    await this.authService.login({ username: this.form.value.username, password: this.form.value.password });
+    this.router.navigate(['/user-list']);
   }
 
 }
