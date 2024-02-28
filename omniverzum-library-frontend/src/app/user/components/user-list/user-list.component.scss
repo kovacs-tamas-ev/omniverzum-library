@@ -1,0 +1,9 @@
+form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    .p-float-label, p-triStateCheckbox {
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+    }
+}

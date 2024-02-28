@@ -1,0 +1,35 @@
+<div class="main-container">
+
+    <div class="filter-section">
+        <form [formGroup]="form">
+            <span class="p-float-label">
+                <input pInputText id="_id" formControlName="_id" />
+                <label for="_id">Felhasználó azonosító</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="username" formControlName="username" />
+                <label for="username">Felhasználónév</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="email" formControlName="email" />
+                <label for="email">E-mail cím</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="fullName" formControlName="fullName" />
+                <label for="fullName">Név</label>
+            </span>
+            <p-triStateCheckbox inputId="admin" label="Admin" formControlName="admin"></p-triStateCheckbox>
+        </form>
+        <div class="button-container">
+            <p-button type="button" (onclick)="filter()" label="Szűrés"></p-button>
+            <p-button (onClick)="resetFilters()" severity="danger" label="Szűrők törlése"></p-button>
+        </div>
+    </div>
+
+
+    <div class="list-section"></div>
+
+
+
+
+</div>
