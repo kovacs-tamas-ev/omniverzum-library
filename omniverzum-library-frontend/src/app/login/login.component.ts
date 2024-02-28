@@ -1,0 +1,34 @@
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../auth/services/auth.service';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [ReactiveFormsModule, InputTextModule, PasswordModule, ButtonModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss'
+})
+export class LoginComponent {
+
+  form!: FormGroup;
+
+  constructor(private fb: FormBuilder, private authService: AuthService) {
+    this.initForm();
+  }
+
+  private initForm() {
+    this.form = this.fb.group({
+      username: [null, Validators.required],
+      password: [null, Validators.required]
+    });
+  }
+
+  login() {
+    this.authService.login({ username: this.form.value.username, password: this.form.value.password });
+  }
+
+}

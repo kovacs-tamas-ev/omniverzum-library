@@ -17,7 +17,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         return;
       }
 
-      console.log('tap for error interceptor');
       const body = (response as HttpResponse<ServerResponseDto<any>>).body;
       if (!body?.success) {
         // Konkrét hibaüzenet kiírása

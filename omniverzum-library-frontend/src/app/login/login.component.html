@@ -1,0 +1,24 @@
+<div id="login-container">
+
+    <img src="assets/img/logo.png">
+
+    <div class="card">
+
+        <form [formGroup]="form">
+            <span class="p-float-label">
+                <input pInputText id="username" autofocus formControlName="username" />
+                <label for="username">Felhasználónév</label>
+            </span>
+            <span class="p-float-label">
+                <p-password id="password" formControlName="password" [feedback]="false"></p-password>
+                <label for="password">Jelszó</label>
+            </span>
+
+            <p-button type="button" label="Bejelentkezés" [disabled]="!form.valid" (onClick)="login()"></p-button>
+        </form>
+    </div>
+
+</div>
+
+
+
