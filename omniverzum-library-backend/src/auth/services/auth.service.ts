@@ -8,6 +8,7 @@ import { User } from "src/library/schemas/user.schema";
 import { mapToClass } from "src/utils/mappers";
 import { LoginPayloadDto } from "../models/login-payload.dto";
 import { LoginResponseDto } from "../models/login-response.dto";
+import { ServerException } from "src/library/models/general/server-exception";
 
 @Injectable()
 export class AuthService {
@@ -34,6 +35,17 @@ export class AuthService {
         const userDataToSign = mapToClass(UserDto, foundUser);
         const token = this.jwtService.sign({ ...userDataToSign });
         return { token, userData: userDataToSign };
+    }
+
+    async findUserOwnData(_id: string): Promise<UserDto> {
+        const filterQuery = { _id } as FilterQuery<User>;
+        const resultDoc = await this.userModel.findOne(filterQuery).lean().exec();
+
+        if (resultDoc === null) {
+            throw new ServerException({ message: 'A felhasználói adatokat nem sikerült lekérni. Próbáljon bejelentkezni újra.' });
+        }
+
+        return mapToClass(UserDto, resultDoc);
     }
 
 }

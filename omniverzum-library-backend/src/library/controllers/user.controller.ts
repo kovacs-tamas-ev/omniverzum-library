@@ -41,13 +41,13 @@ export class UserController {
     @Post('modify-own-data')
     @UseGuards(BasicJwtGuard)
     async modifyOwnData(@Req() request: Request, @Body() modifyOwnDataDto: ModifyOwnDataDto): Promise<void> {
-        const ownData = mapToClass(ModifyOwnDataDto, modifyOwnDataDto);
-        if (hasEmptyStringField(ownData)) {
+        const tokenData = mapToClass(ModifyOwnDataDto, modifyOwnDataDto);
+        if (hasEmptyStringField(tokenData)) {
             throw new ServerException({ message: 'Hibásan megadott adatok, az üres string nem elfogadott' });
         }
 
         const ownUserData = request.user as UserDto;
-        return this.userService.modifyUserData(ownUserData._id, ownData);
+        return this.userService.modifyUserData(ownUserData._id, tokenData);
     }
 
 }
