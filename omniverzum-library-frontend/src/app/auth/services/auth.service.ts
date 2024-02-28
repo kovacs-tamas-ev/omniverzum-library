@@ -34,4 +34,8 @@ export class AuthService {
     return this.token;
   }
 
+  getUserData(): UserDto | undefined {
+    return this.userData;
+  }
+
 }
