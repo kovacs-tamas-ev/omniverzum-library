@@ -7,3 +7,31 @@ form {
         margin-bottom: 1rem;
     }
 }
+
+section {
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.check {
+    color: var(--green-500);
+}
+
+.minus {
+    color: var(--red-500);
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    // flex-wrap: wrap;
+}
+
+p-triStateCheckbox {
+    width: 17.375rem;
+}

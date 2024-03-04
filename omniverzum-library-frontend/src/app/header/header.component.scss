@@ -35,15 +35,3 @@
         }
     }
 }
-
-.icon-button {
-    cursor: pointer;
-    padding: .3rem;
-    border-radius: 6px;
-    &:hover {
-        background-color: rgba(0, 0, 0, .2);
-    }
-    &:active {
-        background-color: rgba(0, 0, 0, .3);
-    }
-}

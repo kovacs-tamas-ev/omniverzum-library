@@ -1,13 +1,11 @@
 <div class="main-container">
 
-    <h2 class="heading">Tagok kezelése</h2>
+    <div class="header-row">
+        <h2 class="heading">Tagok kezelése</h2>
+    </div>
 
-    <div class="filter-section">
+    <section class="filter-container">
         <form [formGroup]="form">
-            <span class="p-float-label">
-                <input pInputText id="_id" formControlName="_id" autocomplete="off" type="search"/>
-                <label for="_id">Felhasználó azonosító</label>
-            </span>
             <span class="p-float-label">
                 <input pInputText id="username" formControlName="username" autocomplete="off" type="search"/>
                 <label for="username">Felhasználónév</label>
@@ -26,10 +24,37 @@
             <p-button (onClick)="resetFilters()" severity="danger" label="Szűrők törlése"></p-button>
             <p-button type="button" (onClick)="filter()" label="Szűrés"></p-button>
         </div>
-    </div>
+    </section>
 
 
-    <div class="list-section"></div>
+    <section class="list-section">
+        <p-table [value]="userList">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Felhasználónév</th>
+                    <th>E-mail</th>
+                    <th>Teljes név</th>
+                    <th>Admin</th>
+                    <th>Műveletek</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.fullName }}</td>
+                    <td>
+                        <i class="pi pi-check check" *ngIf="user.admin"></i>
+                        <i class="pi pi-minus minus" *ngIf="!user.admin"></i>
+                    </td>
+                    <td>
+                        <i class="pi pi-pencil icon-button" pTooltip="Szerkesztés"></i>
+                        <i class="pi pi-trash icon-button minus" pTooltip="Törlés" (click)="confirmDelete(user)"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>        
+    </section>
 
 
 

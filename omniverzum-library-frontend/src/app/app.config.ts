@@ -7,7 +7,7 @@ import { errorInterceptor } from './interceptors/error.interceptor';
 import { serverResponseInterceptor } from './interceptors/server-response.interceptor';
 import { tokenInterceptor } from './interceptors/token.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([tokenInterceptor, serverResponseInterceptor, errorInterceptor])
     ),
-    MessageService
+    MessageService,
+    ConfirmationService
   ]
 };

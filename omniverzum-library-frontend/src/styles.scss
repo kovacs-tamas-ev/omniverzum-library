@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import "primeng/resources/themes/lara-dark-indigo/theme.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 
@@ -17,7 +17,7 @@ body {
 }
 
 .main-container {
-    padding-top: 1rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,9 +33,32 @@ body {
     }
 }
 
-// Experimental
-.heading {
-    color: --var(--text-color);
-    font-size: 2rem;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+.icon-button {
+    cursor: pointer;
+    padding: .5rem;
+    border-radius: 6px;
+    margin-right: .75rem;
+    &:last-child {
+        margin-right: 0;
+    }
+    &:hover {
+        background-color: rgba(0, 0, 0, .2);
+    }
+    &:active {
+        background-color: rgba(0, 0, 0, .3);
+    }
+}
+
+.header-row {
+    width: 100%;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .heading {
+        color: --var(--text-color);
+        font-size: 2rem;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        margin-top: 0;
+    }
 }
