@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import "primeng/resources/themes/lara-dark-teal/theme.css";
+@import "primeng/resources/themes/lara-dark-indigo/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 
@@ -31,4 +31,11 @@ body {
             margin-right: 0;
         }
     }
+}
+
+// Experimental
+.heading {
+    color: --var(--text-color);
+    font-size: 2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
