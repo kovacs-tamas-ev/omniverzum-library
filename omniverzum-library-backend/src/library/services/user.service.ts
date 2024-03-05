@@ -85,6 +85,11 @@ export class UserService {
 
         await this.userModel.updateOne({ _id: userId }, { $set: ownDataToSave });
     }
+
+    async deleteUser(userId: string): Promise<void> {
+        validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
+        await this.userModel.findByIdAndDelete(userId);
+    }
     
 
 }

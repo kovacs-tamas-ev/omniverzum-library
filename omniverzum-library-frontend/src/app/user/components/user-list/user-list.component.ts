@@ -12,6 +12,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
+import { AuthService } from '../../../auth/services/auth.service';
 
 
 @Component({
@@ -32,7 +33,10 @@ export class UserListComponent {
   isEditing!: boolean;
   dialogHeader!: string;
 
-  constructor(private userService: UserService, private fb: FormBuilder, private confirmationService: ConfirmationService) {
+  constructor(private userService: UserService,
+              private fb: FormBuilder,
+              private confirmationService: ConfirmationService,
+              private authService: AuthService) {
     this.initForms();
     this.filter();
   }
@@ -52,12 +56,14 @@ export class UserListComponent {
       rePassword: [null, Validators.required],
       fullName: [null, Validators.required],
       email: [null, Validators.required],
-      admin: [false]
+      admin: [false, Validators.required]
     });
   }
 
   async filter(): Promise<void> {
     this.userList = await this.userService.findUsers(this.filterForm.value);
+    const ownData = this.authService.getUserData()!;
+    this.userList = this.userList.filter(user => user._id !== ownData._id);
   }
 
   resetFilters(): void {
@@ -65,7 +71,8 @@ export class UserListComponent {
     this.filter();
   }
 
-  editUser(user: UserDto): void {
+  showEditUserDialog(user: UserDto): void {
+    this.resetUserForm();
     this.isEditing = true;
     this.dialogHeader = 'Tag szerkesztése';
     this.userForm.get('password')?.disable();
@@ -75,6 +82,7 @@ export class UserListComponent {
   }
 
   showAddUserDialog(): void {
+    this.resetUserForm();
     this.isEditing = false;
     this.dialogHeader = 'Új tag hozzáadása'
     this.userForm.get('password')?.enable();
@@ -84,7 +92,6 @@ export class UserListComponent {
 
   cancel(): void {
     this.userDialogVisible = false;
-    this.userForm.reset();
   }
 
   async saveUser(): Promise<void> {
@@ -113,8 +120,14 @@ export class UserListComponent {
     });
   }
 
-  private delete(user: UserDto): void {
+  private async delete(user: UserDto): Promise<void> {
+    await this.userService.deleteUser(user);
+    this.filter();
+  }
 
+  private resetUserForm(): void {
+    this.userForm.reset();
+    this.userForm.patchValue({ admin: false });
   }
 
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards, UsePipes } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, Req, UseGuards, UsePipes } from "@nestjs/common";
 import { Request } from 'express';
 import { AdminJwtGuard } from "src/auth/guards/admin-jwt-guard";
 import { BasicJwtGuard } from "src/auth/guards/basic-jwt.guard";
@@ -45,6 +45,12 @@ export class UserController {
     async modifyUserData(@Body() modifyUserDataDto: ModifyUserDataDto): Promise<void> {
         const userData = mapToClass(ModifyUserDataDto, modifyUserDataDto);
         await this.userService.modifyUserData(userData);
+    }
+
+    @Delete(':id')
+    @UseGuards(AdminJwtGuard)
+    async deleteUser(@Param('id') id: string): Promise<void> {
+        await this.userService.deleteUser(id);
     }
 
     @Post('modify-own-data')

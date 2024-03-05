@@ -51,7 +51,7 @@
                         <i class="pi pi-minus minus" *ngIf="!user.admin"></i>
                     </td>
                     <td>
-                        <i class="pi pi-pencil icon-button" (click)="editUser(user)" pTooltip="Szerkesztés"></i>
+                        <i class="pi pi-pencil icon-button" (click)="showEditUserDialog(user)" pTooltip="Szerkesztés"></i>
                         <i class="pi pi-trash icon-button minus" pTooltip="Törlés" (click)="confirmDelete(user)"></i>
                     </td>
                 </tr>
