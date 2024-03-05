@@ -13,8 +13,6 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
     }
 
     validate(userData: UserDto) {
-        console.log('admin strategy validate');
-        
         const basicValidedData = basicJwtValidate(userData);
         if (!basicValidedData.admin) {
             throw new ServerException({ message: 'A kéréshez nincs megfelelő jogosultsága' });

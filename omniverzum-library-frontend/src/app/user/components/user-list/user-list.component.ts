@@ -26,9 +26,11 @@ export class UserListComponent {
 
   filterForm!: FormGroup;
   userList: UserDto[] = [];
-  addUserDialogVisible = false;
+  userDialogVisible = false;
 
   userForm!: FormGroup;
+  isEditing!: boolean;
+  dialogHeader!: string;
 
   constructor(private userService: UserService, private fb: FormBuilder, private confirmationService: ConfirmationService) {
     this.initForms();
@@ -63,18 +65,36 @@ export class UserListComponent {
     this.filter();
   }
 
+  editUser(user: UserDto): void {
+    this.isEditing = true;
+    this.dialogHeader = 'Tag szerkesztése';
+    this.userForm.get('password')?.disable();
+    this.userForm.get('rePassword')?.disable();
+    this.userForm.patchValue(user);
+    this.userDialogVisible = true;
+  }
+
   showAddUserDialog(): void {
-    this.addUserDialogVisible = true;
+    this.isEditing = false;
+    this.dialogHeader = 'Új tag hozzáadása'
+    this.userForm.get('password')?.enable();
+    this.userForm.get('rePassword')?.enable();
+    this.userDialogVisible = true;
   }
 
   cancel(): void {
-    this.addUserDialogVisible = false;
+    this.userDialogVisible = false;
     this.userForm.reset();
   }
 
   async saveUser(): Promise<void> {
-    await this.userService.createUser(this.userForm.value);
-    this.addUserDialogVisible = false;
+    if (this.isEditing) {
+      await this.userService.updateUser(this.userForm.value);
+    } else {
+      await this.userService.createUser(this.userForm.value);
+    }
+    
+    this.userDialogVisible = false;
     this.filter();
   }
 

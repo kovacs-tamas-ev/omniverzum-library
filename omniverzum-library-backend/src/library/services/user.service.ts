@@ -11,6 +11,7 @@ import { FilterUserDto } from "../models/user/filter-user.dto";
 import { ModifyOwnDataDto } from "../models/user/modify-own-data.dto";
 import { UserDto } from "../models/user/user.dto";
 import { User } from "../schemas/user.schema";
+import { ModifyUserDataDto } from "../models/user/modify-user-data.dto";
 
 @Injectable()
 export class UserService {
@@ -60,7 +61,17 @@ export class UserService {
         await this.userModel.updateOne({ _id: userId }, { $set: { admin: newAdminState } });
     }
 
-    async modifyUserData(userId: string, modifyOwnDataDto: ModifyOwnDataDto): Promise<void> {
+    async modifyUserData(modifyUserDataDto: ModifyUserDataDto): Promise<void> {
+        validateObjectId(modifyUserDataDto._id, 'Érvénytelen felhasználó azonosító');
+        const existingUser = await this.userModel.findById(modifyUserDataDto._id).exec();
+        if (!existingUser) {
+            throw new ServerException({ message: 'A felhasználó nem található' });
+        }
+
+        await this.userModel.findByIdAndUpdate(modifyUserDataDto._id, modifyUserDataDto).exec();
+    }
+
+    async modifyOwnData(userId: string, modifyOwnDataDto: ModifyOwnDataDto): Promise<void> {
         validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
         const existingUser = await this.userModel.findOne({ _id: userId });
         if (!existingUser) {

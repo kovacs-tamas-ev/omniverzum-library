@@ -10,7 +10,6 @@ export class AdminJwtGuard extends AuthGuard('admin-jwt') {
             await super.canActivate(context);
             return true;
         } catch (err) {
-            console.log('admin guard catch ág');
             if (err instanceof UnauthorizedException) {
                 throw new ServerException({ message: 'A kéréshez jelentkezzen be' });
             }

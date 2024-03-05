@@ -16,4 +16,8 @@ export class UserService {
         await firstValueFrom(this.http.post('/api/user/create', user));
     }
 
+    async updateUser(user: UserDto): Promise<void> {
+        await firstValueFrom(this.http.post('/api/user/modify-user-data', user));
+    }
+
 }

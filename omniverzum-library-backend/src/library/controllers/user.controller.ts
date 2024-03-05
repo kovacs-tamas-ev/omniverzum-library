@@ -12,6 +12,7 @@ import { ModifyOwnDataDto } from "../models/user/modify-own-data.dto";
 import { SetAdminStateDto } from "../models/user/set-admin-state.dto";
 import { UserDto } from "../models/user/user.dto";
 import { UserService } from "../services/user.service";
+import { ModifyUserDataDto } from "../models/user/modify-user-data.dto";
 
 @Controller('user')
 export class UserController {
@@ -38,6 +39,14 @@ export class UserController {
         return this.userService.setAdminState(adminStateDto.userId, adminStateDto.newAdminState);
     }
 
+    @Post('modify-user-data')
+    @UseGuards(AdminJwtGuard)
+    @UsePipes(customValidationPipe)
+    async modifyUserData(@Body() modifyUserDataDto: ModifyUserDataDto): Promise<void> {
+        const userData = mapToClass(ModifyUserDataDto, modifyUserDataDto);
+        await this.userService.modifyUserData(userData);
+    }
+
     @Post('modify-own-data')
     @UseGuards(BasicJwtGuard)
     async modifyOwnData(@Req() request: Request, @Body() modifyOwnDataDto: ModifyOwnDataDto): Promise<void> {
@@ -47,7 +56,7 @@ export class UserController {
         }
 
         const ownUserData = request.user as UserDto;
-        return this.userService.modifyUserData(ownUserData._id, tokenData);
+        return this.userService.modifyOwnData(ownUserData._id, tokenData);
     }
 
 }

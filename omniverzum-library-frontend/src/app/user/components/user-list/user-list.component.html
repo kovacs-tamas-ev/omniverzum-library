@@ -51,7 +51,7 @@
                         <i class="pi pi-minus minus" *ngIf="!user.admin"></i>
                     </td>
                     <td>
-                        <i class="pi pi-pencil icon-button" pTooltip="Szerkesztés"></i>
+                        <i class="pi pi-pencil icon-button" (click)="editUser(user)" pTooltip="Szerkesztés"></i>
                         <i class="pi pi-trash icon-button minus" pTooltip="Törlés" (click)="confirmDelete(user)"></i>
                     </td>
                 </tr>
@@ -61,7 +61,7 @@
 
 </div>
 
-<p-dialog [(visible)]="addUserDialogVisible" header="Új tag hozzáadása" [draggable]="false" [resizable]="false" [modal]="true">
+<p-dialog [(visible)]="userDialogVisible" [header]="dialogHeader" [draggable]="false" [resizable]="false" [modal]="true">
 
     <!-- <ng-template pTemplate="header">valami header</ng-template> -->
 
@@ -74,11 +74,11 @@
             <input pInputText id="username" formControlName="username" autocomplete="off" type="search"/>
             <label for="username">Felhasználónév</label>
         </span>
-        <span class="p-float-label">
+        <span class="p-float-label" *ngIf="!isEditing">
             <input pInputText id="password" formControlName="password" autocomplete="off" type="search"/>
-            <label for="username">Jelszó</label>
+            <label for="password">Jelszó</label>
         </span>
-        <span class="p-float-label">
+        <span class="p-float-label" *ngIf="!isEditing">
             <input pInputText id="rePassword" formControlName="rePassword" autocomplete="off" type="search"/>
             <label for="rePassword">Jelszú újra</label>
         </span>
