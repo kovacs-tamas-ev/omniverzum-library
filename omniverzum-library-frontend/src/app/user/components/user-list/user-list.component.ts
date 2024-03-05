@@ -89,9 +89,11 @@ export class UserListComponent {
 
   async saveUser(): Promise<void> {
     if (this.isEditing) {
-      await this.userService.updateUser(this.userForm.value);
+      const { password, rePassword, ...userDto } = this.userForm.value;
+      await this.userService.updateUser(userDto);
     } else {
-      await this.userService.createUser(this.userForm.value);
+      const { _id, rePassword, ...createUserDto } = this.userForm.value;
+      await this.userService.createUser(createUserDto);
     }
     
     this.userDialogVisible = false;
