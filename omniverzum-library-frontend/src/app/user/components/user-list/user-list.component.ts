@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
@@ -10,65 +10,88 @@ import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox';
 
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TriStateCheckboxModule, TableModule, TooltipModule, ConfirmDialogModule],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TriStateCheckboxModule, CheckboxModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
   providers: [UserService]
 })
 export class UserListComponent {
 
-  form!: FormGroup;
+  filterForm!: FormGroup;
   userList: UserDto[] = [];
+  addUserDialogVisible = false;
+
+  userForm!: FormGroup;
 
   constructor(private userService: UserService, private fb: FormBuilder, private confirmationService: ConfirmationService) {
-    this.initForm();
+    this.initForms();
     this.filter();
   }
 
-  private initForm(): void {
-    this.form = this.fb.group({
+  private initForms(): void {
+    this.filterForm = this.fb.group({
       username: [],
       fullName: [],
       email: [],
       admin: []
     });
+
+    this.userForm = this.fb.group({
+      _id: [],
+      username: [null, Validators.required],
+      password: [null, Validators.required],
+      rePassword: [null, Validators.required],
+      fullName: [null, Validators.required],
+      email: [null, Validators.required],
+      admin: [false]
+    });
   }
 
   async filter(): Promise<void> {
-    this.userList = await this.userService.findUsers(this.form.value);
+    this.userList = await this.userService.findUsers(this.filterForm.value);
   }
 
   resetFilters(): void {
-    this.form.patchValue({
-      _id: null,
-      username: null,
-      fullName: null,
-      email: null,
-      admin:null
-    });
+    this.filterForm.reset();
+    this.filter();
+  }
+
+  showAddUserDialog(): void {
+    this.addUserDialogVisible = true;
+  }
+
+  cancel(): void {
+    this.addUserDialogVisible = false;
+    this.userForm.reset();
+  }
+
+  async saveUser(): Promise<void> {
+    await this.userService.createUser(this.userForm.value);
+    this.addUserDialogVisible = false;
     this.filter();
   }
 
   confirmDelete(user: UserDto): void {
-    console.log('belépett, user:\n', user);
-    
     this.confirmationService.confirm({
       header: 'Törlés megerősítése',
       message: `Biztosan szereté törölni "<strong>${user.fullName}</strong> (<strong>${user.username}</strong>)" tagságát?`,
       acceptLabel: 'Igen',
       acceptIcon: 'pi pi-check',
       acceptButtonStyleClass: 'p-button-outlined',
+      accept: () => this.delete(user),
       rejectLabel: 'Nem',
       rejectIcon: 'pi pi-times'
     });
   }
 
-  private delete(): void {
+  private delete(user: UserDto): void {
 
   }
 

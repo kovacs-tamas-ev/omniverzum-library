@@ -12,4 +12,8 @@ export class UserService {
         return firstValueFrom(this.http.post<UserDto[]>('/api/user/find', filters));
     }
 
+    async createUser(user: UserDto): Promise<void> {
+        await firstValueFrom(this.http.post('/api/user/create', user));
+    }
+
 }

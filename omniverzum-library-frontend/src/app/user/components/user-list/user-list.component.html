@@ -5,20 +5,20 @@
     </div>
 
     <section class="filter-container">
-        <form [formGroup]="form">
+        <form [formGroup]="filterForm">
             <span class="p-float-label">
-                <input pInputText id="username" formControlName="username" autocomplete="off" type="search"/>
-                <label for="username">Felhasználónév</label>
+                <input pInputText id="search-fullName" formControlName="fullName" autocomplete="off" type="search"/>
+                <label for="search-fullName">Név</label>
             </span>
             <span class="p-float-label">
-                <input pInputText id="email" formControlName="email" autocomplete="off" type="search"/>
-                <label for="email">E-mail cím</label>
+                <input pInputText id="search-username" formControlName="username" autocomplete="off" type="search"/>
+                <label for="search-username">Felhasználónév</label>
             </span>
             <span class="p-float-label">
-                <input pInputText id="fullName" formControlName="fullName" autocomplete="off" type="search"/>
-                <label for="fullName">Név</label>
+                <input pInputText id="search-email" formControlName="email" autocomplete="off" type="search"/>
+                <label for="search-email">E-mail cím</label>
             </span>
-            <p-triStateCheckbox inputId="admin" label="Admin" formControlName="admin"></p-triStateCheckbox>
+            <p-triStateCheckbox inputId="search-admin" label="Admin" formControlName="admin"></p-triStateCheckbox>
         </form>
         <div class="button-container">
             <p-button (onClick)="resetFilters()" severity="danger" label="Szűrők törlése"></p-button>
@@ -28,21 +28,24 @@
 
 
     <section class="list-section">
+        <div class="button-container table-button-row">
+            <p-button icon="pi pi-plus" label="Új" styleClass="p-button-success" (onClick)="showAddUserDialog()"></p-button>
+        </div>
         <p-table [value]="userList">
             <ng-template pTemplate="header">
                 <tr>
+                    <th>Teljes név</th>
                     <th>Felhasználónév</th>
                     <th>E-mail</th>
-                    <th>Teljes név</th>
                     <th>Admin</th>
                     <th>Műveletek</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-user>
                 <tr>
+                    <td>{{ user.fullName }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.fullName }}</td>
                     <td>
                         <i class="pi pi-check check" *ngIf="user.admin"></i>
                         <i class="pi pi-minus minus" *ngIf="!user.admin"></i>
@@ -56,7 +59,42 @@
         </p-table>        
     </section>
 
-
-
-
 </div>
+
+<p-dialog [(visible)]="addUserDialogVisible" header="Új tag hozzáadása" [draggable]="false" [resizable]="false" [modal]="true">
+
+    <!-- <ng-template pTemplate="header">valami header</ng-template> -->
+
+    <form class="user-form" [formGroup]="userForm">
+        <span class="p-float-label">
+            <input pInputText id="fullName" formControlName="fullName" autocomplete="off" type="search"/>
+            <label for="fullName">Név</label>
+        </span>
+        <span class="p-float-label">
+            <input pInputText id="username" formControlName="username" autocomplete="off" type="search"/>
+            <label for="username">Felhasználónév</label>
+        </span>
+        <span class="p-float-label">
+            <input pInputText id="password" formControlName="password" autocomplete="off" type="search"/>
+            <label for="username">Jelszó</label>
+        </span>
+        <span class="p-float-label">
+            <input pInputText id="rePassword" formControlName="rePassword" autocomplete="off" type="search"/>
+            <label for="rePassword">Jelszú újra</label>
+        </span>
+        <span class="p-float-label">
+            <input pInputText id="email" formControlName="email" autocomplete="off" type="search"/>
+            <label for="email">E-mail cím</label>
+        </span>
+        <p-checkbox label="Admin" formControlName="admin" [binary]="true"></p-checkbox>
+    </form>
+
+
+    <ng-template pTemplate="footer">
+        <div class="button-container">
+            <p-button label="Mégse" styleClass="p-button-outlined" (onClick)="cancel()"></p-button>
+            <p-button label="Mentés" icon="pi pi-save" styleClass="p-button-success" (onClick)="saveUser()" [disabled]="!userForm.valid"></p-button>
+        </div>
+    </ng-template>
+
+</p-dialog>

@@ -29,9 +29,22 @@ section {
 .filter-container {
     display: flex;
     flex-direction: column;
-    // flex-wrap: wrap;
 }
 
-p-triStateCheckbox {
+p-triStateCheckbox, p-checkbox {
     width: 17.375rem;
+}
+
+.table-button-row {
+    margin-bottom: .5rem;
+}
+
+.user-form {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+
+    .p-float-label {
+        margin-bottom: 2rem;
+    }
 }
