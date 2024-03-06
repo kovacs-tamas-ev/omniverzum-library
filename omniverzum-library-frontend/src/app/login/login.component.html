@@ -4,7 +4,7 @@
 
     <div class="card">
 
-        <form [formGroup]="form">
+        <form [formGroup]="form" (ngSubmit)="login()">
             <span class="p-float-label">
                 <input pInputText id="username" autofocus formControlName="username" />
                 <label for="username">Felhasználónév</label>
@@ -14,7 +14,7 @@
                 <label for="password">Jelszó</label>
             </span>
 
-            <p-button type="button" label="Bejelentkezés" [disabled]="!form.valid" (onClick)="login()"></p-button>
+            <p-button type="submit" label="Bejelentkezés" [disabled]="!form.valid"></p-button>
         </form>
     </div>
 

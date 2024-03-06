@@ -5,7 +5,7 @@
     </div>
 
     <section class="filter-container">
-        <form [formGroup]="filterForm" class="filter-form">
+        <form [formGroup]="filterForm" class="filter-form" (keydown.enter)="filter()">
             <span class="p-float-label">
                 <input pInputText id="search-fullName" formControlName="fullName" autocomplete="off" type="search"/>
                 <label for="search-fullName">Név</label>
@@ -63,7 +63,7 @@
 
 <p-dialog [(visible)]="userDialogVisible" [header]="dialogHeader" [draggable]="false" [resizable]="false" [modal]="true">
 
-    <form class="dialog-form" [formGroup]="userForm">
+    <form class="dialog-form" [formGroup]="userForm" (keydown.enter)="saveUser()">
         <span class="p-float-label">
             <input pInputText id="fullName" formControlName="fullName" autocomplete="off" type="search"/>
             <label for="fullName">Név</label>

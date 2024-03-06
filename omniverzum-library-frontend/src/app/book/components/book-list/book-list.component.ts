@@ -11,6 +11,7 @@ import { BookDto } from '../../../models/book/book.dto';
 import { BookService } from '../../services/book.service';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmationService } from 'primeng/api';
+import { markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
 
 @Component({
   selector: 'app-book-list',
@@ -87,6 +88,11 @@ export class BookListComponent {
   }
 
   async saveBook(): Promise<void> {
+    if (!this.bookForm.valid) {
+      markControlsAsTouchedAndDirty(this.bookForm);
+      return;
+    }
+
     await this.bookService.createOrUpdateBook(this.bookForm.value);
     this.bookDialogVisible = false;
     this.filter();

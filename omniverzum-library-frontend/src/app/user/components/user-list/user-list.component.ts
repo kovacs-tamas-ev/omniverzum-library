@@ -13,6 +13,7 @@ import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AuthService } from '../../../auth/services/auth.service';
+import { markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
 
 
 @Component({
@@ -95,6 +96,11 @@ export class UserListComponent {
   }
 
   async saveUser(): Promise<void> {
+    if (!this.userForm.valid) {
+      markControlsAsTouchedAndDirty(this.userForm);
+      return;
+    }
+
     if (this.isEditing) {
       const { password, rePassword, ...userDto } = this.userForm.value;
       await this.userService.updateUser(userDto);

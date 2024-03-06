@@ -5,7 +5,7 @@
     </div>
 
     <section class="filter-container">
-        <form [formGroup]="filterForm" class="filter-form">
+        <form [formGroup]="filterForm" class="filter-form" (keydown.enter)="filter()">
             <span class="p-float-label">
                 <p-inputNumber formControlName="inventoryNumber" mode="decimal" inputId="search-inventoryNumber" [useGrouping]="false"> </p-inputNumber>
                 <label for="number-input">Leltári szám</label>
@@ -81,7 +81,7 @@
 
 <p-dialog [(visible)]="bookDialogVisible" [header]="dialogHeader" [draggable]="false" [resizable]="false" [modal]="true">
 
-    <form class="dialog-form" [formGroup]="bookForm">
+    <form class="dialog-form" [formGroup]="bookForm" (keydown.enter)="saveBook()">
         <span class="p-float-label">
             <p-inputNumber formControlName="inventoryNumber" mode="decimal" inputId="search-inventoryNumber" [useGrouping]="false"> </p-inputNumber>
             <label for="number-input">Leltári szám</label>
