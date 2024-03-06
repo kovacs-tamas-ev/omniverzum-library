@@ -10,6 +10,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { BookDto } from '../../../models/book/book.dto';
 import { BookService } from '../../services/book.service';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-book-list',
@@ -29,7 +30,7 @@ export class BookListComponent {
   isEditing!: boolean;
   dialogHeader!: string;
 
-  constructor(private fb: FormBuilder, private bookService: BookService) {
+  constructor(private fb: FormBuilder, private bookService: BookService, private confirmationService: ConfirmationService) {
     this.initForms();
     this.filter();
   }
@@ -92,7 +93,21 @@ export class BookListComponent {
   }
 
   confirmDelete(book: BookDto): void {
+    this.confirmationService.confirm({
+      header: 'Törlés megerősítése',
+      message: `Biztosan szereté törölni a(z) "<strong>${book.author} - ${book.title}</strong> című könyvet?`,
+      acceptLabel: 'Igen',
+      acceptIcon: 'pi pi-check',
+      acceptButtonStyleClass: 'p-button-outlined',
+      accept: () => this.delete(book),
+      rejectLabel: 'Nem',
+      rejectIcon: 'pi pi-times'
+    });
+  }
 
+  async delete(book: BookDto): Promise<void> {
+    await this.bookService.deleteBook(book);
+    this.filter();
   }
 
 

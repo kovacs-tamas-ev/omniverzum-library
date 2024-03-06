@@ -7,6 +7,7 @@ import { BookDto } from "../models/book/book.dto";
 import { FilterBookDto } from "../models/book/filter-book.dto";
 import { isString } from "class-validator";
 import { mapAllToClass } from "src/utils/mappers";
+import { validateObjectId } from "src/utils/object-utils";
 
 @Injectable()
 export class BookService {
@@ -41,6 +42,10 @@ export class BookService {
         return mapAllToClass(BookDto, resultObjects);
     }
 
+    async deleteBook(id: string): Promise<void> {
+        validateObjectId(id, 'Érvénytelen könyv azonosító');
+        await this.bookModel.findByIdAndDelete(id);
+    }
 
 
 }

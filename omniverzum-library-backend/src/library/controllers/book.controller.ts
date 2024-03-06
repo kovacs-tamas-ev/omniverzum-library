@@ -1,10 +1,9 @@
-import { Body, Controller, Post, UseGuards, UsePipes } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, UseGuards, UsePipes } from "@nestjs/common";
 import { AdminJwtGuard } from "src/auth/guards/admin-jwt-guard";
 import { BasicJwtGuard } from "src/auth/guards/basic-jwt.guard";
 import { mapToClass } from "src/utils/mappers";
 import { customValidationPipe } from "../exception-filters/custom-exception-factory";
 import { BookDto } from "../models/book/book.dto";
-import { CreateBookDto } from "../models/book/create-book.dto";
 import { FilterBookDto } from "../models/book/filter-book.dto";
 import { BookService } from "../services/book.service";
 
@@ -27,5 +26,12 @@ export class BookController {
         const plainFilterData = mapToClass(FilterBookDto, filterData);
         return this.bookService.findBooks(plainFilterData);
     }
+
+    @Delete(':id')
+    @UseGuards(AdminJwtGuard)
+    async deleteUser(@Param('id') id: string): Promise<void> {
+        await this.bookService.deleteBook(id);
+    }
+
 
 }
