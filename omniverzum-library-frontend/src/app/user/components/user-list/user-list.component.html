@@ -18,6 +18,10 @@
                 <input pInputText id="search-email" formControlName="email" autocomplete="off" type="search"/>
                 <label for="search-email">E-mail cím</label>
             </span>
+            <span class="p-float-label">
+                <input pInputText id="search-course" formControlName="course" autocomplete="off" type="search"/>
+                <label for="search-course">Képzés</label>
+            </span>
             <p-triStateCheckbox inputId="search-admin" label="Admin" formControlName="admin"></p-triStateCheckbox>
         </form>
         <div class="button-container">
@@ -37,6 +41,7 @@
                     <th>Teljes név</th>
                     <th>Felhasználónév</th>
                     <th>E-mail</th>
+                    <th>Képzés</th>
                     <th>Admin</th>
                     <th>Műveletek</th>
                 </tr>
@@ -46,6 +51,7 @@
                     <td>{{ user.fullName }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
+                    <td>{{ user.course }}</td>
                     <td>
                         <i class="pi pi-check success-color" *ngIf="user.admin"></i>
                         <i class="pi pi-minus error-color" *ngIf="!user.admin"></i>
@@ -76,6 +82,10 @@
         <span class="p-float-label">
             <input pInputText id="email" formControlName="email" autocomplete="off" type="search"/>
             <label for="email" class="required">E-mail cím</label>
+        </span>
+        <span class="p-float-label">
+            <input pInputText id="course" formControlName="course" autocomplete="off" type="search"/>
+            <label for="course" class="required">Képzés</label>
         </span>
         <p-checkbox label="Admin" formControlName="admin" [binary]="true"></p-checkbox>
     </form>

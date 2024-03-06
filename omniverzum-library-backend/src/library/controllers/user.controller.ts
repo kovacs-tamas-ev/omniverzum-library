@@ -9,7 +9,6 @@ import { ServerException } from "../models/general/server-exception";
 import { CreateUserDto } from "../models/user/create-user.dto";
 import { FilterUserDto } from "../models/user/filter-user.dto";
 import { ModifyOwnDataDto } from "../models/user/modify-own-data.dto";
-import { SetAdminStateDto } from "../models/user/set-admin-state.dto";
 import { UserDto } from "../models/user/user.dto";
 import { UserService } from "../services/user.service";
 import { ModifyUserDataDto } from "../models/user/modify-user-data.dto";
@@ -30,13 +29,6 @@ export class UserController {
     @UseGuards(AdminJwtGuard)
     async findUsers(@Body() filterData?: FilterUserDto): Promise<UserDto[]> {
         return this.userService.findUsers(filterData);
-    }
-
-    @Post('set-admin-state')
-    @UseGuards(AdminJwtGuard)
-    @UsePipes(customValidationPipe)
-    async setAdminState(@Body() adminStateDto: SetAdminStateDto): Promise<void> {
-        return this.userService.setAdminState(adminStateDto.userId, adminStateDto.newAdminState);
     }
 
     @Post('modify-user-data')

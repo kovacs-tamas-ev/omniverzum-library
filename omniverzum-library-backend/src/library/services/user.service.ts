@@ -55,16 +55,6 @@ export class UserService {
         return mapAllToClass(UserDto, resultObjects);
     }
 
-    async setAdminState(userId: string, newAdminState: boolean): Promise<void> {
-        validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
-        const existingUser = await this.userModel.findOne({ _id: userId });
-        if (!existingUser) {
-            throw new ServerException({ message: 'A felhasználó nem található' });
-        }
-
-        await this.userModel.updateOne({ _id: userId }, { $set: { admin: newAdminState } });
-    }
-
     async modifyUserData(modifyUserDataDto: ModifyUserDataDto): Promise<void> {
         validateObjectId(modifyUserDataDto._id, 'Érvénytelen felhasználó azonosító');
         const existingUser = await this.userModel.findById(modifyUserDataDto._id).exec();

@@ -3,4 +3,5 @@ export class ModifyOwnDataDto {
     password?: string = undefined;
     fullName?: string = undefined;
     email?: string = undefined;
+    course?: string = undefined;
 }

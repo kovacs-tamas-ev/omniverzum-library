@@ -47,6 +47,7 @@ export class UserListComponent {
       username: [],
       fullName: [],
       email: [],
+      course: [],
       admin: []
     });
 
@@ -55,6 +56,7 @@ export class UserListComponent {
       username: [null, Validators.required],
       fullName: [null, Validators.required],
       email: [null, Validators.required],
+      course: [null, Validators.required],
       admin: [false, Validators.required]
     });
   }
