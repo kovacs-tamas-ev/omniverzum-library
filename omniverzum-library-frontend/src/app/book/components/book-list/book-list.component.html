@@ -71,7 +71,7 @@
                     <td>{{ book.subjectArea }}</td>
                     <td>
                         <i class="pi pi-pencil icon-button" (click)="showEditBookDialog(book)" pTooltip="Szerkesztés"></i>
-                        <i class="pi pi-trash icon-button minus" pTooltip="Törlés" (click)="confirmDelete(book)"></i>
+                        <i class="pi pi-trash icon-button error-color" pTooltip="Törlés" (click)="confirmDelete(book)"></i>
                     </td>
                 </tr>
             </ng-template>

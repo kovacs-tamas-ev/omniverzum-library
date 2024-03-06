@@ -94,12 +94,20 @@ section {
     margin-bottom: .5rem;
 }
 
-.check {
+.success-color {
     color: var(--green-500);
 }
 
-.minus {
+.error-color {
     color: var(--red-500);
+}
+
+.warn-color {
+    color: var(--yellow-500);
+}
+
+.cyan-color {
+    color: var(--cyan-500);
 }
 
 .dialog-form {

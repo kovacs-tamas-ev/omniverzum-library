@@ -47,6 +47,12 @@ export class UserController {
         await this.userService.modifyUserData(userData);
     }
 
+    @Post('reset/:id')
+    @UseGuards(AdminJwtGuard)
+    async restUserData(@Param('id') id: string): Promise<void> {
+        await this.userService.resetUserData(id);
+    }
+
     @Delete(':id')
     @UseGuards(AdminJwtGuard)
     async deleteUser(@Param('id') id: string): Promise<void> {

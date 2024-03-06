@@ -47,12 +47,13 @@
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     <td>
-                        <i class="pi pi-check check" *ngIf="user.admin"></i>
-                        <i class="pi pi-minus minus" *ngIf="!user.admin"></i>
+                        <i class="pi pi-check success-color" *ngIf="user.admin"></i>
+                        <i class="pi pi-minus error-color" *ngIf="!user.admin"></i>
                     </td>
                     <td>
                         <i class="pi pi-pencil icon-button" (click)="showEditUserDialog(user)" pTooltip="Szerkesztés"></i>
-                        <i class="pi pi-trash icon-button minus" pTooltip="Törlés" (click)="confirmDelete(user)"></i>
+                        <i class="pi pi-replay icon-button cyan-color" pTooltip="Alapértelmezett adatokra visszaállítás" (click)="confirmResetUserData(user)"></i>
+                        <i class="pi pi-trash icon-button error-color" pTooltip="Törlés" (click)="confirmDelete(user)"></i>
                     </td>
                 </tr>
             </ng-template>
@@ -68,17 +69,9 @@
             <input pInputText id="fullName" formControlName="fullName" autocomplete="off" type="search"/>
             <label for="fullName" class="required">Név</label>
         </span>
-        <span class="p-float-label">
+        <span class="p-float-label" *ngIf="isEditing">
             <input pInputText id="username" formControlName="username" autocomplete="off" type="search"/>
             <label for="username" class="required">Felhasználónév</label>
-        </span>
-        <span class="p-float-label" *ngIf="!isEditing">
-            <input pInputText id="password" formControlName="password" autocomplete="off" type="search"/>
-            <label for="password" class="required">Jelszó</label>
-        </span>
-        <span class="p-float-label" *ngIf="!isEditing">
-            <input pInputText id="rePassword" formControlName="rePassword" autocomplete="off" type="search"/>
-            <label for="rePassword" class="required">Jelszú újra</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="email" formControlName="email" autocomplete="off" type="search"/>

@@ -19,8 +19,12 @@ export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
     async createUser(userData: CreateUserDto): Promise<void> {
-        const hashedPassword = await bcrypt.hash(userData.password, 10);
-        const userDataToSave = {  ...userData, password: hashedPassword };
+        const hashedPassword = await bcrypt.hash(userData.email, 10);
+        const userDataToSave = {
+            ...userData,
+            password: hashedPassword,
+            username: userData.email,
+        };
         
         const newUser = new this.userModel(userDataToSave);
         await newUser.save();
@@ -84,6 +88,19 @@ export class UserService {
         }
 
         await this.userModel.updateOne({ _id: userId }, { $set: ownDataToSave });
+    }
+
+    async resetUserData(userId: string): Promise<void> {
+        validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
+        const existingUser = await this.userModel.findOne({ _id: userId });
+        if (!existingUser) {
+            throw new ServerException({ message: 'A felhasználó nem található' });
+        }
+
+        const userAsObj = existingUser.toObject();
+        const hashedPassword = await bcrypt.hash(userAsObj.email, 10);
+        const userWithDefaults = { ...userAsObj, username: userAsObj.email, password: hashedPassword };
+        await this.userModel.updateOne({ _id: userId }, { $set: userWithDefaults });
     }
 
     async deleteUser(userId: string): Promise<void> {

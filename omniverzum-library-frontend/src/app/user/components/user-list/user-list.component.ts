@@ -53,8 +53,6 @@ export class UserListComponent {
     this.userForm = this.fb.group({
       _id: [],
       username: [null, Validators.required],
-      password: [null, Validators.required],
-      rePassword: [null, Validators.required],
       fullName: [null, Validators.required],
       email: [null, Validators.required],
       admin: [false, Validators.required]
@@ -76,8 +74,7 @@ export class UserListComponent {
     this.resetUserForm();
     this.isEditing = true;
     this.dialogHeader = 'Tag szerkesztése';
-    this.userForm.get('password')?.disable();
-    this.userForm.get('rePassword')?.disable();
+    this.userForm.get('username')?.enable();
     this.userForm.patchValue(user);
     this.userDialogVisible = true;
   }
@@ -85,9 +82,8 @@ export class UserListComponent {
   showAddUserDialog(): void {
     this.resetUserForm();
     this.isEditing = false;
-    this.dialogHeader = 'Új tag hozzáadása'
-    this.userForm.get('password')?.enable();
-    this.userForm.get('rePassword')?.enable();
+    this.dialogHeader = 'Új tag hozzáadása';
+    this.userForm.get('username')?.disable();
     this.userDialogVisible = true;
   }
 
@@ -110,6 +106,24 @@ export class UserListComponent {
     }
     
     this.userDialogVisible = false;
+    this.filter();
+  }
+
+  confirmResetUserData(user: UserDto): void {
+    this.confirmationService.confirm({
+      header: 'Visszaállítás megerősítése',
+      message: `Biztosan szereté visszaállítani a felhasználónév és jelszó mezőket az e-mail címre "<strong>${user.fullName}</strong> (<strong>${user.username}</strong>)" számára?`,
+      acceptLabel: 'Igen',
+      acceptIcon: 'pi pi-check',
+      acceptButtonStyleClass: 'p-button-outlined',
+      accept: () => this.resetUserData(user),
+      rejectLabel: 'Nem',
+      rejectIcon: 'pi pi-times'
+    });
+  }
+
+  async resetUserData(user: UserDto): Promise<void> {
+    await this.userService.resetUserData(user);
     this.filter();
   }
 

@@ -21,6 +21,10 @@ export class UserService {
         await firstValueFrom(this.http.post('/api/user/modify-user-data', user));
     }
 
+    async resetUserData(user: UserDto): Promise<void> {
+        await firstValueFrom(this.http.post(`/api/user/reset/${user._id}`, {}));
+    }
+
     async deleteUser(user: UserDto): Promise<void> {
         await firstValueFrom(this.http.delete(`/api/user/${user._id}`));
     }
