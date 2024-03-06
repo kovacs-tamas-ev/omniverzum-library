@@ -1,4 +1,8 @@
 #header-row {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 9999;
     height: 3rem;
     display: flex;
     justify-content: space-between;
