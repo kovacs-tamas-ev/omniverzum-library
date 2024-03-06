@@ -66,23 +66,23 @@
     <form class="dialog-form" [formGroup]="userForm" (keydown.enter)="saveUser()">
         <span class="p-float-label">
             <input pInputText id="fullName" formControlName="fullName" autocomplete="off" type="search"/>
-            <label for="fullName">Név</label>
+            <label for="fullName" class="required">Név</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="username" formControlName="username" autocomplete="off" type="search"/>
-            <label for="username">Felhasználónév</label>
+            <label for="username" class="required">Felhasználónév</label>
         </span>
         <span class="p-float-label" *ngIf="!isEditing">
             <input pInputText id="password" formControlName="password" autocomplete="off" type="search"/>
-            <label for="password">Jelszó</label>
+            <label for="password" class="required">Jelszó</label>
         </span>
         <span class="p-float-label" *ngIf="!isEditing">
             <input pInputText id="rePassword" formControlName="rePassword" autocomplete="off" type="search"/>
-            <label for="rePassword">Jelszú újra</label>
+            <label for="rePassword" class="required">Jelszú újra</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="email" formControlName="email" autocomplete="off" type="search"/>
-            <label for="email">E-mail cím</label>
+            <label for="email" class="required">E-mail cím</label>
         </span>
         <p-checkbox label="Admin" formControlName="admin" [binary]="true"></p-checkbox>
     </form>

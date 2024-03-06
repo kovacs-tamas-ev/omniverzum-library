@@ -7,6 +7,12 @@ body {
     margin: 0;
 }
 
+label.required::after {
+    content: '*';
+    color: var(--red-500);
+    margin-left: .25rem;;
+}
+
 .p-float-label input:not(:placeholder-shown) ~ label,
 .p-float-label input:-webkit-autofill ~ label
 {

@@ -84,15 +84,15 @@
     <form class="dialog-form" [formGroup]="bookForm" (keydown.enter)="saveBook()">
         <span class="p-float-label">
             <p-inputNumber formControlName="inventoryNumber" mode="decimal" inputId="search-inventoryNumber" [useGrouping]="false"> </p-inputNumber>
-            <label for="number-input">Leltári szám</label>
+            <label for="number-input" class="required">Leltári szám</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="title" formControlName="title" autocomplete="off" type="search"/>
-            <label for="title">Cím</label>
+            <label for="title" class="required">Cím</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="author" formControlName="author" autocomplete="off" type="search"/>
-            <label for="author">Író</label>
+            <label for="author" class="required">Író</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="isbn" formControlName="isbn" autocomplete="off" type="search"/>

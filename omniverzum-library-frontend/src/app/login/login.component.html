@@ -7,11 +7,11 @@
         <form [formGroup]="form" (ngSubmit)="login()">
             <span class="p-float-label">
                 <input pInputText id="username" autofocus formControlName="username" />
-                <label for="username">Felhasználónév</label>
+                <label for="username" class="required">Felhasználónév</label>
             </span>
             <span class="p-float-label">
                 <p-password id="password" formControlName="password" [feedback]="false"></p-password>
-                <label for="password">Jelszó</label>
+                <label for="password" class="required">Jelszó</label>
             </span>
 
             <p-button type="submit" label="Bejelentkezés" [disabled]="!form.valid"></p-button>
