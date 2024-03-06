@@ -68,3 +68,37 @@ p-dialog {
         justify-content: center;
     }
 }
+
+// Table and filter based pages
+section {
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-button-row {
+    margin-bottom: .5rem;
+}
+
+.check {
+    color: var(--green-500);
+}
+
+.minus {
+    color: var(--red-500);
+}
+
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.3rem;
+
+    .p-float-label {
+        margin-bottom: 2rem;
+    }
+    
+}

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -9,11 +9,12 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { BookDto } from '../../../models/book/book.dto';
 import { BookService } from '../../services/book.service';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, InputNumberModule],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss',
   providers: [BookService]
@@ -23,14 +24,76 @@ export class BookListComponent {
   filterForm!: FormGroup;
   bookList: BookDto[] = [];
 
-  constructor(private bookService: BookService) {
+  bookDialogVisible = false;
+  bookForm!: FormGroup;
+  isEditing!: boolean;
+  dialogHeader!: string;
+
+  constructor(private fb: FormBuilder, private bookService: BookService) {
+    this.initForms();
     this.filter();
   }
 
-  async filter(): Promise<void> {
-    this.bookList = await this.bookService.findBooks();
-    console.log('book list\n', this.bookList);
-    
+  private initForms(): void {
+    this.filterForm = this.fb.group({
+      inventoryNumber: [null],
+      title: [null],
+      author: [null],
+      isbn: [null],
+      publisher: [null],
+      genre: [null],
+      subjectArea: [null],
+    });
+
+    this.bookForm = this.fb.group({
+      _id: [null],
+      inventoryNumber: [null, Validators.required],
+      title: [null, Validators.required],
+      author: [null, Validators.required],
+      isbn: [null],
+      publisher: [null],
+      genre: [null],
+      subjectArea: [null],      
+    });
   }
+
+  async filter(): Promise<void> {
+    this.bookList = await this.bookService.findBooks(this.filterForm.value);
+  }
+
+  resetFilters(): void {
+    this.filterForm.reset();
+    this.filter();
+  }
+
+  showAddBookDialog(): void {
+    this.bookForm.reset();
+    this.isEditing = true;
+    this.dialogHeader = 'Új könyv hozzáadása';
+    this.bookDialogVisible = true;
+  }
+
+  showEditBookDialog(book: BookDto): void {
+    this.bookForm.reset();
+    this.isEditing = true;
+    this.dialogHeader = 'Könyv szerkesztése';
+    this.bookForm.patchValue(book);
+    this.bookDialogVisible = true;
+  }
+
+  cancel(): void {
+    this.bookDialogVisible = false;
+  }
+
+  async saveBook(): Promise<void> {
+    await this.bookService.createOrUpdateBook(this.bookForm.value);
+    this.bookDialogVisible = false;
+    this.filter();
+  }
+
+  confirmDelete(book: BookDto): void {
+
+  }
+
 
 }

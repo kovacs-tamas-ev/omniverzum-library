@@ -8,6 +8,10 @@ export class BookService {
 
     constructor(private http: HttpClient) {}
 
+    async createOrUpdateBook(book: BookDto): Promise<void> {
+        await firstValueFrom(this.http.post('/api/book/create-or-update', book));
+    }
+
     findBooks(filters?: BookDto): Promise<BookDto[]> {
         return firstValueFrom(this.http.post<BookDto[]>('/api/book/find', filters));
     }

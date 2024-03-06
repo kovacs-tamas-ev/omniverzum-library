@@ -1,24 +1,11 @@
-form {
+.filter-form {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     .p-float-label, p-triStateCheckbox {
         margin-right: 1rem;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
     }
-}
-
-section {
-    margin-bottom: 2rem;
-    width: 100%;
-}
-
-.check {
-    color: var(--green-500);
-}
-
-.minus {
-    color: var(--red-500);
 }
 
 .button-container {
@@ -26,25 +13,7 @@ section {
     flex-wrap: nowrap;
 }
 
-.filter-container {
-    display: flex;
-    flex-direction: column;
-}
 
 p-triStateCheckbox, p-checkbox {
     width: 17.375rem;
-}
-
-.table-button-row {
-    margin-bottom: .5rem;
-}
-
-.user-form {
-    display: flex;
-    flex-direction: column;
-    padding-top: 1rem;
-
-    .p-float-label {
-        margin-bottom: 2rem;
-    }
 }
