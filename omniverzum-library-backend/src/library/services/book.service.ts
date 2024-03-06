@@ -13,9 +13,14 @@ export class BookService {
 
     constructor(@InjectModel(Book.name) private bookModel: Model<Book>) {}
 
-    async createBook(bookData: CreateBookDto): Promise<void> {
-        const newBook = new this.bookModel(bookData);
-        await newBook.save();
+    async createOrUpdateBook(book: BookDto): Promise<void> {
+        const { _id, ...bookData } = book;
+        if (_id) {
+            await this.bookModel.findByIdAndUpdate(_id, bookData);
+        } else {
+            const newBook = new this.bookModel(bookData);
+            await newBook.save();    
+        }
     }
 
     async findBooks(filters: FilterBookDto): Promise<BookDto[]> {

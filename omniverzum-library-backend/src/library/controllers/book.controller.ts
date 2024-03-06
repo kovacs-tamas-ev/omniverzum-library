@@ -13,12 +13,12 @@ export class BookController {
 
     constructor(private bookService: BookService) {}
 
-    @Post('create')
+    @Post('create-or-update')
     @UseGuards(AdminJwtGuard)
     @UsePipes(customValidationPipe)
-    async createBook(@Body() bookData: CreateBookDto): Promise<void> {
-        const plainBookData = mapToClass(CreateBookDto, bookData);
-        await this.bookService.createBook(plainBookData);
+    async createOrUpdateBook(@Body() book: BookDto): Promise<void> {
+        const plainBookData = mapToClass(BookDto, book);
+        await this.bookService.createOrUpdateBook(plainBookData);
     }
 
     @Post('find')
