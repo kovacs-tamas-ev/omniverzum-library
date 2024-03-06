@@ -8,6 +8,7 @@ import { serverResponseInterceptor } from './interceptors/server-response.interc
 import { tokenInterceptor } from './interceptors/token.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([tokenInterceptor, serverResponseInterceptor, errorInterceptor])
     ),
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     MessageService,
     ConfirmationService
   ]
