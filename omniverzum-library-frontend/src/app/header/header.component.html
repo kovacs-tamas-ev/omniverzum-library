@@ -5,6 +5,14 @@
     </div>
 
     <div class="header-group" *ngIf="authService.hasToken()">
+        <div *ngIf="authService.getUserData()?.admin">
+            <a routerLink="/user-list">Tagok</a>
+            <a routerLink="/book-list">Könyvek</a>
+        </div>
+        <div></div>
+    </div>
+
+    <div class="header-group" *ngIf="authService.hasToken()">
         <span>
             <i class="pi pi-user icon-button"></i>
             <span>{{authService.getUserData()?.fullName}}</span>
