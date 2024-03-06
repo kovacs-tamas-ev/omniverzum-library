@@ -35,7 +35,7 @@
         <div class="button-container table-button-row">
             <p-button icon="pi pi-plus" label="Új" styleClass="p-button-success" (onClick)="showAddUserDialog()"></p-button>
         </div>
-        <p-table [value]="userList">
+        <p-table [value]="userList" responsiveLayout="stack" [breakpoint]="'960px'">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Teljes név</th>
@@ -48,15 +48,17 @@
             </ng-template>
             <ng-template pTemplate="body" let-user>
                 <tr>
-                    <td>{{ user.fullName }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.course }}</td>
+                    <td><span class="p-column-title">Teljes név:</span>{{ user.fullName }}</td>
+                    <td><span class="p-column-title">Felhasználónév:</span>{{ user.username }}</td>
+                    <td><span class="p-column-title">E-mail:</span>{{ user.email }}</td>
+                    <td><span class="p-column-title">Képzés:</span>{{ user.course }}</td>
                     <td>
+                        <span class="p-column-title">Admin:</span>
                         <i class="pi pi-check success-color" *ngIf="user.admin"></i>
                         <i class="pi pi-minus error-color" *ngIf="!user.admin"></i>
                     </td>
                     <td>
+                        <span class="p-column-title">Műveletek:</span>
                         <i class="pi pi-pencil icon-button" (click)="showEditUserDialog(user)" pTooltip="Szerkesztés"></i>
                         <i class="pi pi-replay icon-button cyan-color" pTooltip="Alapértelmezett adatokra visszaállítás" (click)="confirmResetUserData(user)"></i>
                         <i class="pi pi-trash icon-button error-color" pTooltip="Törlés" (click)="confirmDelete(user)"></i>

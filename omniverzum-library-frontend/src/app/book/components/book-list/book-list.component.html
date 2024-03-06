@@ -5,49 +5,47 @@
     </div>
 
     <section class="filter-container">
-        <p-fieldset legend="Szűrés" [toggleable]="true" [collapsed]="true">
-            <form [formGroup]="filterForm" class="filter-form" (keydown.enter)="filter()">
-                <span class="p-float-label">
-                    <p-inputNumber formControlName="inventoryNumber" mode="decimal" inputId="search-inventoryNumber" [useGrouping]="false"> </p-inputNumber>
-                    <label for="number-input">Leltári szám</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="search-title" formControlName="title" autocomplete="off" type="search"/>
-                    <label for="search-title">Cím</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="search-author" formControlName="author" autocomplete="off" type="search"/>
-                    <label for="search-author">Író</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="search-isbn" formControlName="isbn" autocomplete="off" type="search"/>
-                    <label for="search-isbn">ISBN</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="search-publisher" formControlName="publisher" autocomplete="off" type="search"/>
-                    <label for="search-publisher">Kiadó</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="search-genre" formControlName="genre" autocomplete="off" type="search"/>
-                    <label for="search-genre">Műfaj</label>
-                </span>
-                <span class="p-float-label">
-                    <input pInputText id="search-subjectArea" formControlName="subjectArea" autocomplete="off" type="search"/>
-                    <label for="search-subjectArea">Tárgykör</label>
-                </span>
-            </form>
-            <div class="button-container">
-                <p-button (onClick)="resetFilters()" severity="danger" label="Szűrők törlése"></p-button>
-                <p-button type="button" (onClick)="filter()" label="Szűrés"></p-button>
-            </div>
-        </p-fieldset>
+        <form [formGroup]="filterForm" class="filter-form" (keydown.enter)="filter()">
+            <span class="p-float-label">
+                <p-inputNumber formControlName="inventoryNumber" mode="decimal" inputId="search-inventoryNumber" [useGrouping]="false"> </p-inputNumber>
+                <label for="number-input">Leltári szám</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="search-title" formControlName="title" autocomplete="off" type="search"/>
+                <label for="search-title">Cím</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="search-author" formControlName="author" autocomplete="off" type="search"/>
+                <label for="search-author">Író</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="search-isbn" formControlName="isbn" autocomplete="off" type="search"/>
+                <label for="search-isbn">ISBN</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="search-publisher" formControlName="publisher" autocomplete="off" type="search"/>
+                <label for="search-publisher">Kiadó</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="search-genre" formControlName="genre" autocomplete="off" type="search"/>
+                <label for="search-genre">Műfaj</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="search-subjectArea" formControlName="subjectArea" autocomplete="off" type="search"/>
+                <label for="search-subjectArea">Tárgykör</label>
+            </span>
+        </form>
+        <div class="button-container">
+            <p-button (onClick)="resetFilters()" severity="danger" label="Szűrők törlése"></p-button>
+            <p-button type="button" (onClick)="filter()" label="Szűrés"></p-button>
+        </div>
     </section>    
 
     <section class="list-section">
         <div class="button-container table-button-row">
             <p-button icon="pi pi-plus" label="Új" styleClass="p-button-success" (onClick)="showAddBookDialog()"></p-button>
         </div>
-        <p-table [value]="bookList">
+        <p-table [value]="bookList" responsiveLayout="stack" [breakpoint]="'1000px'">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Leltári szám</th>
@@ -62,14 +60,15 @@
             </ng-template>
             <ng-template pTemplate="body" let-book>
                 <tr>
-                    <td>{{ book.inventoryNumber }}</td>
-                    <td>{{ book.title }}</td>
-                    <td>{{ book.author }}</td>
-                    <td>{{ book.isbn }}</td>
-                    <td>{{ book.publisher }}</td>
-                    <td>{{ book.genre }}</td>
-                    <td>{{ book.subjectArea }}</td>
+                    <td><span class="p-column-title">Leltári szám:</span>{{ book.inventoryNumber }}</td>
+                    <td><span class="p-column-title">Cím:</span>{{ book.title }}</td>
+                    <td><span class="p-column-title">Író:</span>{{ book.author }}</td>
+                    <td><span class="p-column-title">ISBN:</span>{{ book.isbn }}</td>
+                    <td><span class="p-column-title">Kiadó:</span>{{ book.publisher }}</td>
+                    <td><span class="p-column-title">Műfaj:</span>{{ book.genre }}</td>
+                    <td><span class="p-column-title">Tárgykör:</span>{{ book.subjectArea }}</td>
                     <td>
+                        <span class="p-column-title">Műveletek:</span>
                         <i class="pi pi-pencil icon-button" (click)="showEditBookDialog(book)" pTooltip="Szerkesztés"></i>
                         <i class="pi pi-trash icon-button error-color" pTooltip="Törlés" (click)="confirmDelete(book)"></i>
                     </td>

@@ -39,3 +39,15 @@
         }
     }
 }
+
+@media (max-width: 1000px) {
+    #user-name {
+        display: none;
+    }
+    #logout-icon {
+        margin-left: 0;
+    }
+    .link-container {
+        display: none;
+    }
+}

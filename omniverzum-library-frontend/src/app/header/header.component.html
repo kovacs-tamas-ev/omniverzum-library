@@ -4,7 +4,7 @@
         <span id="header-title">Omniverzum - könyvtár</span>
     </div>
 
-    <div class="header-group" *ngIf="authService.hasToken()">
+    <div class="header-group link-container" *ngIf="authService.hasToken()">
         <div *ngIf="authService.getUserData()?.admin">
             <a routerLink="/user-list">Tagok</a>
             <a routerLink="/book-list">Könyvek</a>
@@ -15,7 +15,7 @@
     <div class="header-group" *ngIf="authService.hasToken()">
         <span>
             <i class="pi pi-user icon-button"></i>
-            <span>{{authService.getUserData()?.fullName}}</span>
+            <span id="user-name">{{authService.getUserData()?.fullName}}</span>
         </span>
         <span>
             <i id="logout-icon" class="pi pi-sign-out icon-button" (click)="logout()"></i>
