@@ -13,6 +13,13 @@ label.required::after {
     margin-left: .25rem;;
 }
 
+.p-float-label label[for] {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 12px;
+    color: #777;
+}
+
 fieldset {
     background-color: inherit;
 }

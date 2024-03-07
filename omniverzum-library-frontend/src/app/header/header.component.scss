@@ -34,14 +34,25 @@
         a {
             margin-left: .25rem;
             color: var(--primary-color-text);
+            font-size: .9rem;
             text-decoration: none;
             &.active-link {
                 text-decoration: underline;
             }
         }
 
+        i {
+            font-size: .8rem;
+        }
+
         &:has(> a.active-link) {
             background-color: rgba(0, 0, 0, .2);
+            a {
+                font-size: 1rem;
+            }
+            i {
+                font-size: .9rem;
+            }
         }
     }
 }

@@ -22,6 +22,9 @@
                 <input pInputText id="search-course" formControlName="course" autocomplete="off" type="search"/>
                 <label for="search-course">Képzés</label>
             </span>
+            <span class="p-float-label">
+                <app-date-filter label="Csatlakozás dátuma" inputId="membershipStart" formControlName="membershipStart"></app-date-filter>
+            </span>
             <p-triStateCheckbox inputId="search-admin" label="Admin" formControlName="admin"></p-triStateCheckbox>
         </form>
         <div class="button-container">
@@ -42,6 +45,7 @@
                     <th>Felhasználónév</th>
                     <th>E-mail</th>
                     <th>Képzés</th>
+                    <th>Csatlakozás dátuma</th>
                     <th>Admin</th>
                     <th>Műveletek</th>
                 </tr>
@@ -52,6 +56,7 @@
                     <td><span class="p-column-title">Felhasználónév:</span>{{ user.username }}</td>
                     <td><span class="p-column-title">E-mail:</span>{{ user.email }}</td>
                     <td><span class="p-column-title">Képzés:</span>{{ user.course }}</td>
+                    <td><span class="p-column-title">Csatlakozás dátuma:</span>{{ user.membershipStart | date: 'yyyy.MM.dd' }}</td>
                     <td>
                         <span class="p-column-title">Admin:</span>
                         <i class="pi pi-check success-color" *ngIf="user.admin"></i>

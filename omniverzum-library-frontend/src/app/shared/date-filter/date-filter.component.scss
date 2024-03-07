@@ -1,0 +1,14 @@
+form::ng-deep {
+    display: flex;
+
+    .p-inputtext {
+        width: 14.375rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    p-button button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}

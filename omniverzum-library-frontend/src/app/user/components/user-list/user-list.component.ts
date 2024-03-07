@@ -14,12 +14,13 @@ import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AuthService } from '../../../auth/services/auth.service';
 import { markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
+import { DateFilterComponent } from '../../../shared/date-filter/date-filter.component';
 
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TriStateCheckboxModule, CheckboxModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TriStateCheckboxModule, CheckboxModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, DateFilterComponent],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
   providers: [UserService]
@@ -48,6 +49,7 @@ export class UserListComponent {
       fullName: [],
       email: [],
       course: [],
+      membershipStart: [],
       admin: []
     });
 

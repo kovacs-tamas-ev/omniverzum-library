@@ -1,0 +1,7 @@
+<form [formGroup]="form">
+    <span class="p-float-label">
+        <p-calendar [selectionMode]="currentMode.selectionMode" [inputId]="inputId" formControlName="dateValue"></p-calendar>
+        <label for="{{inputId}}">{{label}}</label>
+    </span>
+    <p-button (onClick)="rotateMode()" [icon]="currentMode.icon" styleClass="p-button-info" [pTooltip]="currentMode.tooltip"></p-button>
+</form>
