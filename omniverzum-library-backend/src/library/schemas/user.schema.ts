@@ -21,6 +21,9 @@ export class User {
     @Prop({ required: true })
     course: string;
 
+    @Prop({ required: true })
+    membershipStart: Date;
+
     @Prop({ default: false })
     admin: boolean;
 

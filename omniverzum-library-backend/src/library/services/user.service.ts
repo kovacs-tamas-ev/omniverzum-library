@@ -24,6 +24,7 @@ export class UserService {
             ...userData,
             password: hashedPassword,
             username: userData.email,
+            membershipStart: new Date()
         };
         
         const newUser = new this.userModel(userDataToSave);

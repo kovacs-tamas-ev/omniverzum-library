@@ -5,6 +5,7 @@ export class UserDto {
     fullName: string = undefined;
     email: string = undefined;
     course: string = undefined;
+    membershipStart: Date = undefined;
     admin: boolean = undefined;
 
 }

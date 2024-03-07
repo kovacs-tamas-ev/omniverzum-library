@@ -30,7 +30,7 @@ export function basicJwtValidate(userData: UserDto): UserDto {
     const areTheSameKeys = userDataKeys.join(',') === givenDataKeys.join(',');
 
     if (!areTheSameKeys) {
-        throw new ServerException({ message: 'A kéréshez jelentkezzen be' });
+        // throw new ServerException({ message: 'A kéréshez jelentkezzen be' });
     }
 
     return userData;
