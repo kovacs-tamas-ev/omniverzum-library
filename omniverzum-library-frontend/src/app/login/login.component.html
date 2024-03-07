@@ -1,9 +1,9 @@
 <div id="login-container">
-
-    <img src="assets/img/logo.png">
-
-    <div class="card">
-
+    <p-card>
+        <div class="logo-container">
+            <img class="logo-image" src="assets/img/logo-with-text.jpg">
+        </div>
+    
         <form [formGroup]="form" (ngSubmit)="login()">
             <span class="p-float-label">
                 <input pInputText id="username" autofocus formControlName="username" />
@@ -13,12 +13,9 @@
                 <p-password id="password" formControlName="password" [feedback]="false"></p-password>
                 <label for="password" class="required">Jelszó</label>
             </span>
-
+    
             <p-button type="submit" label="Bejelentkezés" [disabled]="!form.valid"></p-button>
         </form>
-    </div>
-
+    
+    </p-card>    
 </div>
-
-
-

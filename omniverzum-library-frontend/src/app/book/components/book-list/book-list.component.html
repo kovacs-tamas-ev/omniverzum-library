@@ -16,7 +16,7 @@
             </span>
             <span class="p-float-label">
                 <input pInputText id="search-author" formControlName="author" autocomplete="off" type="search"/>
-                <label for="search-author">Író</label>
+                <label for="search-author">Író/szerkesztő</label>
             </span>
             <span class="p-float-label">
                 <input pInputText id="search-isbn" formControlName="isbn" autocomplete="off" type="search"/>
@@ -49,24 +49,24 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>Leltári szám</th>
+                    <th>Író/szerkesztő</th>
                     <th>Cím</th>
-                    <th>Író</th>
-                    <th>ISBN</th>
-                    <th>Kiadó</th>
                     <th>Műfaj</th>
                     <th>Tárgykör</th>
+                    <th>Kiadó</th>
+                    <th>ISBN</th>
                     <th>Műveletek</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-book>
                 <tr>
                     <td><span class="p-column-title">Leltári szám:</span>{{ book.inventoryNumber }}</td>
+                    <td><span class="p-column-title">Író/szerkesztő:</span>{{ book.author }}</td>
                     <td><span class="p-column-title">Cím:</span>{{ book.title }}</td>
-                    <td><span class="p-column-title">Író:</span>{{ book.author }}</td>
-                    <td><span class="p-column-title">ISBN:</span>{{ book.isbn }}</td>
-                    <td><span class="p-column-title">Kiadó:</span>{{ book.publisher }}</td>
                     <td><span class="p-column-title">Műfaj:</span>{{ book.genre }}</td>
                     <td><span class="p-column-title">Tárgykör:</span>{{ book.subjectArea }}</td>
+                    <td><span class="p-column-title">Kiadó:</span>{{ book.publisher }}</td>
+                    <td><span class="p-column-title">ISBN:</span>{{ book.isbn }}</td>
                     <td>
                         <span class="p-column-title">Műveletek:</span>
                         <i class="pi pi-pencil icon-button" (click)="showEditBookDialog(book)" pTooltip="Szerkesztés"></i>
@@ -92,7 +92,7 @@
         </span>
         <span class="p-float-label">
             <input pInputText id="author" formControlName="author" autocomplete="off" type="search"/>
-            <label for="author" class="required">Író</label>
+            <label for="author" class="required">Író/szerkesztő</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="isbn" formControlName="isbn" autocomplete="off" type="search"/>
