@@ -6,11 +6,11 @@ export interface DateFilterDto {
 
 export interface DateRange {
     from: Date;
-    to: Date;
+    to?: Date;
 }
 
 export enum DateFilterModes {
-    RANGE = 'RANGE',
-    BEFORE = 'BEFORE',
-    AFTER = 'AFTER'
+    RANGE = 'range',
+    BEFORE = 'before',
+    AFTER = 'after'
 }

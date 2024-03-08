@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, forwardRef } from '@angular/core';
+import { AfterContentInit, Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
 import { DateFilterDto, DateFilterModes } from '../../models/shared/date-filter.dto';
+
+interface ModeOption {
+  value: DateFilterModes;
+  icon: string;
+  tooltip: string;
+  selectionMode: 'range' | 'single';
+}
 
 @Component({
   selector: 'app-date-filter',
@@ -12,9 +19,9 @@ import { DateFilterDto, DateFilterModes } from '../../models/shared/date-filter.
   imports: [CommonModule, ReactiveFormsModule, CalendarModule, ButtonModule, TooltipModule],
   templateUrl: './date-filter.component.html',
   styleUrl: './date-filter.component.scss',
-  providers: [{ provide: NG_VALUE_ACCESSOR, useClass: forwardRef(() => DateFilterComponent), multi: true }]
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateFilterComponent), multi: true }]
 })
-export class DateFilterComponent implements ControlValueAccessor {
+export class DateFilterComponent implements ControlValueAccessor, AfterContentInit {
 
   @Input()
   label = 'Dátum szűrés';
@@ -25,19 +32,44 @@ export class DateFilterComponent implements ControlValueAccessor {
   ngModelChange!: (value: DateFilterDto | null) => void;
 
   form!: FormGroup;
-  modeOptions!: any[];
-  currentMode!: any;
+  modeOptions!: ModeOption[];
+  currentMode!: ModeOption;
 
   constructor(private fb: FormBuilder) {
     this.initForm();
     this.initModeOptions();
     this.initMode();
+    
+  }
+
+  ngAfterContentInit(): void {
+    this.emitOnFormChanges();
   }
 
   private initForm(): void {
     this.form = this.fb.group({
       dateValue: [null],
       mode: [null]
+    });
+  }
+
+  private emitOnFormChanges(): void {
+    this.form.valueChanges.subscribe(() => {
+      const { dateValue, mode } = this.form.value;
+      const hasValue = mode === DateFilterModes.RANGE
+        ? dateValue !== null && dateValue !== undefined && dateValue.length > 0
+        : dateValue !== null && dateValue !== undefined;
+      if (!hasValue) {
+        this.ngModelChange(null);
+        return;
+      }
+      let valueToEmit: DateFilterDto = {};
+      if (mode === DateFilterModes.RANGE) {
+        valueToEmit.range = { from: dateValue[0], to: dateValue[1] };
+      } else {
+        valueToEmit[mode as keyof DateFilterDto] = dateValue;
+      }
+      this.ngModelChange(valueToEmit);
     });
   }
 
@@ -74,8 +106,8 @@ export class DateFilterComponent implements ControlValueAccessor {
     const currentModeIndex = this.modeOptions.findIndex(mode => mode.value === this.form.value.mode);
     const nextModeIndex = currentModeIndex + 1 < this.modeOptions.length ? currentModeIndex + 1 : 0;
     const nextModeOption = this.modeOptions[nextModeIndex];
-    this.form.patchValue({ dateValue: null, mode: nextModeOption.value });
     this.currentMode = nextModeOption;
+    this.form.patchValue({ dateValue: null, mode: nextModeOption.value });
   }
 
   registerOnChange(fn: any): void {
@@ -86,7 +118,7 @@ export class DateFilterComponent implements ControlValueAccessor {
 
 
   setDisabledState(isDisabled: boolean): void {
-    this.form.disable();
+    isDisabled ? this.form.disable() : this.form.enable();
   }
 
 }
