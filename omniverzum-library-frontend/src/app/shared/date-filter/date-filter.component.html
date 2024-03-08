@@ -3,5 +3,5 @@
         <p-calendar [selectionMode]="currentMode.selectionMode" [inputId]="inputId" formControlName="dateValue"></p-calendar>
         <label for="{{inputId}}">{{label}}</label>
     </span>
-    <p-button (onClick)="rotateMode()" [icon]="currentMode.icon" styleClass="p-button-info" [pTooltip]="currentMode.tooltip"></p-button>
+    <p-button (onClick)="rotateMode()" [icon]="currentMode.icon" styleClass="p-button-outlined" [pTooltip]="currentMode.tooltip"></p-button>
 </form>
