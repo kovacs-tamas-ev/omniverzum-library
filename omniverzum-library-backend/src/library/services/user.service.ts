@@ -108,12 +108,7 @@ export class UserService {
             throw new ServerException({ message: 'A felhasználó nem található' });
         }
 
-        let ownDataToSave = modifyOwnDataDto;
-        if (modifyOwnDataDto.password) {
-            ownDataToSave = { ...modifyOwnDataDto, password: await bcrypt.hash(modifyOwnDataDto.password, 10) };
-        }
-
-        await this.userModel.updateOne({ _id: userId }, { $set: ownDataToSave });
+        await this.userModel.updateOne({ _id: userId }, { $set: modifyOwnDataDto });
     }
 
     async resetUserData(userId: string): Promise<void> {
@@ -134,5 +129,15 @@ export class UserService {
         await this.userModel.findByIdAndDelete(userId);
     }
     
+    async changePassword(userId: string, newPassword: string): Promise<void> {
+        validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
+        const existingUser = await this.userModel.findOne({ _id: userId });
+        if (!existingUser) {
+            throw new ServerException({ message: 'A felhasználó nem található' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await this.userModel.updateOne({ _id: userId }, { $set: { password: hashedPassword } });
+    }
 
 }

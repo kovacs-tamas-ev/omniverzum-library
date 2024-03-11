@@ -12,6 +12,7 @@ import { ModifyOwnDataDto } from "../models/user/modify-own-data.dto";
 import { UserDto } from "../models/user/user.dto";
 import { UserService } from "../services/user.service";
 import { ModifyUserDataDto } from "../models/user/modify-user-data.dto";
+import { ChangePasswordDto } from "../models/user/change-password.dto";
 
 @Controller('user')
 export class UserController {
@@ -54,13 +55,26 @@ export class UserController {
     @Post('modify-own-data')
     @UseGuards(BasicJwtGuard)
     async modifyOwnData(@Req() request: Request, @Body() modifyOwnDataDto: ModifyOwnDataDto): Promise<void> {
-        const tokenData = mapToClass(ModifyOwnDataDto, modifyOwnDataDto);
-        if (hasEmptyStringField(tokenData)) {
-            throw new ServerException({ message: 'Hibásan megadott adatok, az üres string nem elfogadott' });
+        const ownData = mapToClass(ModifyOwnDataDto, modifyOwnDataDto);
+        if (hasEmptyStringField(ownData)) {
+            throw new ServerException({ message: 'Hibásan megadott adatok, minden mező kitöltése kötelező' });
         }
 
-        const ownUserData = request.user as UserDto;
-        return this.userService.modifyOwnData(ownUserData._id, tokenData);
+        const tokenUserData = request.user as UserDto;
+        return this.userService.modifyOwnData(tokenUserData._id, ownData);
+    }
+
+    @Post('change-password')
+    @UseGuards(BasicJwtGuard)
+    @UsePipes(customValidationPipe)
+    async changePassword(@Req() request: Request, @Body() changePasswordDto: ChangePasswordDto): Promise<void> {
+        const passwordDto = mapToClass(ChangePasswordDto, changePasswordDto);
+        if (passwordDto.password !== passwordDto.rePassword) {
+            throw new ServerException({ message: 'Az "Új jelszó" és az "Új jelszó megismétlése" mezők értéke különböző' });
+        }
+
+        const tokenUserData = request.user as UserDto;
+        await this.userService.changePassword(tokenUserData._id, changePasswordDto.password);
     }
 
 }
