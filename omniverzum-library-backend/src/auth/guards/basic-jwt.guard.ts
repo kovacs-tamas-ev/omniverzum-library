@@ -1,6 +1,7 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ServerException } from "src/library/models/general/server-exception";
+import { ErrorNature } from "src/library/models/general/server-response.dto";
 
 @Injectable()
 export class BasicJwtGuard extends AuthGuard('basic-jwt') {
@@ -11,7 +12,7 @@ export class BasicJwtGuard extends AuthGuard('basic-jwt') {
             return true;
         } catch (err) {
             if (err instanceof UnauthorizedException) {
-                throw new ServerException({ message: 'A kéréshez jelentkezzen be' });
+                throw new ServerException({ message: 'A kéréshez jelentkezzen be', nature: ErrorNature.LOGIN });
             }
             throw err;
         }
