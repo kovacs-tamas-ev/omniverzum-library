@@ -1,0 +1,52 @@
+<div id="login-container">
+    <p-card>
+
+        <div class="logo-container">
+            <img class="logo-image" src="assets/img/logo-with-text.jpg">
+        </div>
+        <p-tabView>
+
+            <p-tabPanel header="Alapadatok">
+            
+                <form [formGroup]="basicDataForm" (ngSubmit)="changeBasicData()">
+                    <span class="p-float-label">
+                        <input pInputText id="username" autofocus formControlName="username" autocomplete="off" type="search" />
+                        <label for="username" class="required">Felhasználónév</label>
+                    </span>
+                    <span class="p-float-label">
+                        <input pInputText id="fullName" autofocus formControlName="fullName" autocomplete="off" type="search" />
+                        <label for="fullName" class="required">Teljes név</label>
+                    </span>
+                    <span class="p-float-label">
+                        <input pInputText id="email" autofocus formControlName="email" autocomplete="off" type="search" />
+                        <label for="email" class="required">E-mail</label>
+                    </span>
+            
+                    <p-button type="submit" label="Alapadatok módosítása" icon="pi pi-save" [disabled]="!basicDataForm.valid"></p-button>
+                </form>        
+            </p-tabPanel>
+
+            <p-tabPanel header="Jelszó">
+                <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+                    <span class="p-float-label">
+                        <p-password id="password" formControlName="password" [feedback]="false" autocomplete="off" type="search"></p-password>
+                        <label for="password" class="required">Új jelszó</label>
+                    </span>
+                    <span class="p-float-label">
+                        <p-password id="rePassword" formControlName="rePassword" [feedback]="false" autocomplete="off" type="search"></p-password>
+                        <label for="rePassword" class="required">Új jelszó megismétlése</label>
+                    </span>
+                    <p-button type="submit" label="Jelszó módosítása" icon="pi pi-save" [disabled]="!passwordForm.valid"></p-button>
+                </form>
+
+            </p-tabPanel>
+
+            <p-tabPanel header="Fiók törlése">
+                <p-button type="button" label="Fiók törlése" icon="pi pi-trash" styleClass="p-button-danger" (onClick)="confirmDeleteProfile()"></p-button>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    
+    </p-card>    
+</div>

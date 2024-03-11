@@ -8,7 +8,7 @@
     
         <div class="header-group" *ngIf="authService.hasToken()">
             <span>
-                <i class="pi pi-user icon-button"></i>
+                <i class="pi pi-user icon-button" (click)="navigateToProfile()"></i>
                 <span id="user-name">{{authService.getUserData()?.fullName}}</span>
             </span>
             <span>

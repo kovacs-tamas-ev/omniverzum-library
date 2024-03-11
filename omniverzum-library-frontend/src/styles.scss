@@ -132,3 +132,10 @@ section {
     opacity: .75;
     font-weight: bold;
 }
+
+p-tabView .p-tabview-panels {
+    padding-top: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
