@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { ToastModule } from 'primeng/toast';
-import { AuthService } from './auth/services/auth.service';
-import { HeaderComponent } from './header/header.component';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { HeaderComponent } from './header/header.component';
 
 @Component({
   selector: 'app-root',
@@ -12,20 +11,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'Omniverzum-könyvtár';
-
-  constructor(private authService: AuthService, private router: Router) {}
-
-  ngOnInit(): void {
-    this.getLoggedInUserOrNavigateToLogin();
-  }
-
-  private async getLoggedInUserOrNavigateToLogin(): Promise<void> {
-    const hasLoggedInUser = await this.authService.loadUserFromStoredTokenIfPresent();
-    if (!hasLoggedInUser) {
-      this.router.navigate(['/login']);
-    }
-  }
 
 }

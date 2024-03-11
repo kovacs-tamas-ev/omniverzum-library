@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -9,6 +9,7 @@ import { tokenInterceptor } from './interceptors/token.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { AuthService } from './auth/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,13 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([tokenInterceptor, serverResponseInterceptor, errorInterceptor])
     ),
     { provide: LocationStrategy, useClass: HashLocationStrategy },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (authService: AuthService) => () => authService.loadUserFromStoredTokenIfPresent(),
+      deps: [AuthService],
+      multi: true
+    },
+
     MessageService,
     ConfirmationService
   ]
