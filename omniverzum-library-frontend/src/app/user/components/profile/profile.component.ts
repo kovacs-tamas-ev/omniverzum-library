@@ -12,6 +12,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { UserDto } from '../../../models/user/user.dto';
 import { connectControlsValidation, markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
 import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -30,7 +31,8 @@ export class ProfileComponent {
               private fb: FormBuilder,
               private confirmationService: ConfirmationService,
               private userService: UserService,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private router: Router) {
     this.userData = this.authService.getUserData()!;
     this.initForms();
   }
@@ -79,7 +81,10 @@ export class ProfileComponent {
   }
 
   async deleteProfile(): Promise<void> {
-
+    await this.userService.deleteOwnProfile();
+    this.messageService.add({ detail: 'A felhasználói fiókját sikeresen töröltük', severity: 'success', sticky: true });
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }

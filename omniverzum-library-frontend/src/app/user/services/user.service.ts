@@ -31,7 +31,7 @@ export class UserService {
     }
 
     async deleteUser(user: UserDto): Promise<void> {
-        await firstValueFrom(this.http.delete(`/api/user/${user._id}`));
+        await firstValueFrom(this.http.delete(`/api/user/delete/${user._id}`));
     }
 
     // Basic functions
@@ -41,6 +41,10 @@ export class UserService {
 
     async changePassword(changePasswordDto: ChangePasswordDto): Promise<void> {
         await firstValueFrom(this.http.post('/api/user/change-password', changePasswordDto));
+    }
+
+    async deleteOwnProfile(): Promise<void> {
+        await firstValueFrom(this.http.delete('/api/user/delete-own-profile'));
     }
 
 

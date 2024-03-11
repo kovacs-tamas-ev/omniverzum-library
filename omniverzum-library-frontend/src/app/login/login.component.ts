@@ -31,7 +31,7 @@ export class LoginComponent {
 
   async login() {
     await this.authService.login({ username: this.form.value.username, password: this.form.value.password });
-    this.router.navigate(['/user-list']);
+    this.router.navigate(['/profile']);
   }
 
 }

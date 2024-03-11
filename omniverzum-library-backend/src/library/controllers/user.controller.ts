@@ -6,13 +6,13 @@ import { mapToClass } from "src/utils/mappers";
 import { hasEmptyStringField } from "src/utils/object-utils";
 import { customValidationPipe } from "../exception-filters/custom-exception-factory";
 import { ServerException } from "../models/general/server-exception";
+import { ChangePasswordDto } from "../models/user/change-password.dto";
 import { CreateUserDto } from "../models/user/create-user.dto";
 import { FilterUserDto } from "../models/user/filter-user.dto";
 import { ModifyOwnDataDto } from "../models/user/modify-own-data.dto";
+import { ModifyUserDataDto } from "../models/user/modify-user-data.dto";
 import { UserDto } from "../models/user/user.dto";
 import { UserService } from "../services/user.service";
-import { ModifyUserDataDto } from "../models/user/modify-user-data.dto";
-import { ChangePasswordDto } from "../models/user/change-password.dto";
 
 @Controller('user')
 export class UserController {
@@ -46,7 +46,7 @@ export class UserController {
         await this.userService.resetUserData(id);
     }
 
-    @Delete(':id')
+    @Delete('delete/:id')
     @UseGuards(AdminJwtGuard)
     async deleteUser(@Param('id') id: string): Promise<void> {
         await this.userService.deleteUser(id);
@@ -76,5 +76,13 @@ export class UserController {
         const tokenUserData = request.user as UserDto;
         await this.userService.changePassword(tokenUserData._id, changePasswordDto.password);
     }
+
+    @Delete('delete-own-profile')
+    @UseGuards(BasicJwtGuard)
+    async deleteOwnProfile(@Req() request: Request): Promise<void> {
+        const tokenUserData = request.user as UserDto;
+        await this.userService.deleteOwnProfile(tokenUserData._id);
+    }
+
 
 }

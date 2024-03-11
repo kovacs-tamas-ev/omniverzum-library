@@ -140,4 +140,24 @@ export class UserService {
         await this.userModel.updateOne({ _id: userId }, { $set: { password: hashedPassword } });
     }
 
+    async deleteOwnProfile(userId: string): Promise<void> {
+        validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
+        const existingUser = await this.userModel.findOne({ _id: userId });
+        if (!existingUser) {
+            throw new ServerException({ message: 'A felhasználó nem található' });
+        }
+
+        if (existingUser.admin) {
+            await this.validateIfLastAdmin();
+        }
+        await this.userModel.findByIdAndDelete(userId);
+    }
+
+    private async validateIfLastAdmin(): Promise<void> {
+        const adminCount = await this.userModel.countDocuments({ admin: true }).exec();
+        if (adminCount < 2) {
+            throw new ServerException({ message: 'Jelenleg Ön az egyetlen adminisztrátor az alkalmazásban. A fiókja törlése előtt valakinek aja meg az admin jogosultságot.' });
+        }
+    }
+
 }

@@ -2,9 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from 'passport-jwt';
 import { ServerException } from "src/library/models/general/server-exception";
+import { ErrorNature } from "src/library/models/general/server-response.dto";
 import { UserDto } from "src/library/models/user/user.dto";
 import { basicJwtStrategyConfig, basicJwtValidate } from "./basic-jwt.strategy";
-import { ErrorNature } from "src/library/models/general/server-response.dto";
 
 @Injectable()
 export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
