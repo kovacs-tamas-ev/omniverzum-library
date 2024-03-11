@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { HeaderComponent } from './header/header.component';
-import { PrimeNGConfig } from 'primeng/api';
+import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ import { PrimeNGConfig } from 'primeng/api';
 export class AppComponent {
   title = 'Omniverzum-könyvtár';
 
-  constructor(private primeNgConfig: PrimeNGConfig) {
+  constructor(private primeNgConfig: PrimeNGConfig, private messageService: MessageService) {
     this.initPrimeNgConfig();
   }
 
@@ -28,6 +28,16 @@ export class AppComponent {
       dateFormat: 'yy.mm.dd',
       firstDayOfWeek: 1
     });
+
+    // Override default life
+    const originalAdd = this.messageService.add;
+    this.messageService.add = (message: Message) => {
+      const adjustedMessage = { ...message };
+      if (adjustedMessage.life === null || adjustedMessage.life === undefined) {
+        adjustedMessage.life = 5000;
+      }
+      originalAdd.call(this.messageService, adjustedMessage);
+    }
   }
 
 }

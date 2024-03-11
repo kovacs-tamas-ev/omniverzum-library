@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -31,7 +31,10 @@ export class BookListComponent {
   isEditing!: boolean;
   dialogHeader!: string;
 
-  constructor(private fb: FormBuilder, private bookService: BookService, private confirmationService: ConfirmationService) {
+  constructor(private fb: FormBuilder,
+              private bookService: BookService,
+              private confirmationService: ConfirmationService,
+              private messageService: MessageService) {
     this.initForms();
     this.filter();
   }
@@ -70,7 +73,7 @@ export class BookListComponent {
 
   showAddBookDialog(): void {
     this.bookForm.reset();
-    this.isEditing = true;
+    this.isEditing = false;
     this.dialogHeader = 'Új könyv hozzáadása';
     this.bookDialogVisible = true;
   }
@@ -93,7 +96,13 @@ export class BookListComponent {
       return;
     }
 
+    console.log(`editing: ${this.isEditing}`);
+    
     await this.bookService.createOrUpdateBook(this.bookForm.value);
+    const successMessage = this.isEditing
+      ? `A(z) <strong>${this.bookForm.value.title}</strong> című könyv adatait sikeresen módosítottuk`
+      : `A(z) <strong>${this.bookForm.value.title}</strong> című könyvet sikeresen felvettük az adatbázisba`;
+    this.messageService.add({ detail: successMessage, severity: 'success' });
     this.bookDialogVisible = false;
     this.filter();
   }
@@ -113,6 +122,7 @@ export class BookListComponent {
 
   async delete(book: BookDto): Promise<void> {
     await this.bookService.deleteBook(book);
+    this.messageService.add({ detail: `A(z) <strong>${book.title}</strong> című könyvet sikeresen töröltük`, severity: 'success' });
     this.filter();
   }
 

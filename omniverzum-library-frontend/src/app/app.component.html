@@ -1,6 +1,10 @@
 <div class="background"></div>
 
-<p-toast></p-toast>
+<p-toast>
+    <ng-template let-message pTemplate="message">
+        <p class="custom-message" innerHtml="{{message.detail}}"></p>
+    </ng-template>
+</p-toast>
 <p-confirmDialog></p-confirmDialog>
 
 <app-header></app-header>

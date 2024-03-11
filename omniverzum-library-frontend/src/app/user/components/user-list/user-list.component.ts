@@ -9,7 +9,7 @@ import { UserDto } from '../../../models/user/user.dto';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -37,6 +37,7 @@ export class UserListComponent {
   constructor(private userService: UserService,
               private fb: FormBuilder,
               private confirmationService: ConfirmationService,
+              private messageService: MessageService,
               private authService: AuthService) {
     this.initForms();
     this.filter();
@@ -103,9 +104,11 @@ export class UserListComponent {
     if (this.isEditing) {
       const { password, rePassword, ...userDto } = this.userForm.value;
       await this.userService.updateUser(userDto);
+      this.messageService.add({ detail: `<strong>${userDto.fullName}</strong> felhasználói adatait sikeresen módosítottuk`, severity: 'success' });
     } else {
       const { _id, rePassword, ...createUserDto } = this.userForm.value;
       await this.userService.createUser(createUserDto);
+      this.messageService.add({ detail: `<strong>${createUserDto.fullName}</strong> felhasználói fiókját sikeresen létrehoztuk`, severity: 'success' });
     }
     
     this.userDialogVisible = false;
@@ -127,6 +130,7 @@ export class UserListComponent {
 
   async resetUserData(user: UserDto): Promise<void> {
     await this.userService.resetUserData(user);
+    this.messageService.add({ detail: `<strong>${user.fullName}</strong> adatait sikeresen visszaállítottuk az alapértelmezett értékekre`, severity: 'success' });
     this.filter();
   }
 
@@ -145,6 +149,7 @@ export class UserListComponent {
 
   private async delete(user: UserDto): Promise<void> {
     await this.userService.deleteUser(user);
+    this.messageService.add({ detail: `<strong>${user.fullName}</strong> felhasználót sikeresen töröltük`, severity: 'success',  });
     this.filter();
   }
 
