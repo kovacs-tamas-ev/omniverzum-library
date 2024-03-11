@@ -3,12 +3,17 @@ import { Injectable } from "@angular/core";
 import { UserDto } from "../../models/user/user.dto";
 import { firstValueFrom } from "rxjs";
 import { CreateUserDto } from "../../models/user/create-user.dto";
+import { ModifyOwnDataDto } from "../../models/user/modify-own-data.dto";
+import { ChangePasswordDto } from "../../models/user/change-password.dto";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class UserService {
 
     constructor(private http: HttpClient) {}
 
+    // Admin functions
     findUsers(filters?: UserDto): Promise<UserDto[]> {
         return firstValueFrom(this.http.post<UserDto[]>('/api/user/find', filters));
     }
@@ -28,5 +33,15 @@ export class UserService {
     async deleteUser(user: UserDto): Promise<void> {
         await firstValueFrom(this.http.delete(`/api/user/${user._id}`));
     }
+
+    // Basic functions
+    async modifyOwnData(ownData: ModifyOwnDataDto): Promise<void> {
+        await firstValueFrom(this.http.post('/api/user/modify-own-data', ownData));
+    }
+
+    async changePassword(changePasswordDto: ChangePasswordDto): Promise<void> {
+        await firstValueFrom(this.http.post('/api/user/change-password', changePasswordDto));
+    }
+
 
 }

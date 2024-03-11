@@ -1,20 +1,22 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { TabViewModule } from 'primeng/tabview';
 import { AuthService } from '../../../auth/services/auth.service';
 import { UserDto } from '../../../models/user/user.dto';
-import { CardModule } from 'primeng/card';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TabViewModule } from 'primeng/tabview';
-import { PasswordModule } from 'primeng/password';
-import { connectControlsValidation } from '../../../utils/form-utils';
-import { CommonModule } from '@angular/common';
-import { ConfirmationService } from 'primeng/api';
+import { connectControlsValidation, markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, TabViewModule, InputTextModule, PasswordModule, ButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, CardModule, TabViewModule, InputTextModule, PasswordModule, ButtonModule, CalendarModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -24,7 +26,11 @@ export class ProfileComponent {
   basicDataForm!: FormGroup;
   passwordForm!: FormGroup;
 
-  constructor(private authService: AuthService, private fb: FormBuilder, private confirmationService: ConfirmationService) {
+  constructor(private authService: AuthService,
+              private fb: FormBuilder,
+              private confirmationService: ConfirmationService,
+              private userService: UserService,
+              private messageService: MessageService) {
     this.userData = this.authService.getUserData()!;
     this.initForms();
   }
@@ -33,7 +39,9 @@ export class ProfileComponent {
     this.basicDataForm = this.fb.group({
       username: [this.userData.username, Validators.required],
       fullName: [this.userData.fullName, Validators.required],
-      email: [this.userData.email, Validators.required]
+      email: [this.userData.email, Validators.required],
+      course: [{ value: this.userData.course, disabled: true }],
+      membershipStart: [{ value: this.userData.membershipStart, disabled: true }]
     });
     this.passwordForm = this.fb.group({
       password: [null, [Validators.required, connectControlsValidation('rePassword')]],
@@ -42,11 +50,19 @@ export class ProfileComponent {
   }
 
   async changeBasicData(): Promise<void> {
-
+    await this.userService.modifyOwnData(this.basicDataForm.value);
+    this.messageService.add({ detail: 'Az alapadatok módosítása sikeres', severity: 'success' });
   }
 
   async changePassword(): Promise<void> {
+    if (!this.passwordForm.valid) {
+      markControlsAsTouchedAndDirty(this.passwordForm);
+      return;
+    }
 
+    await this.userService.changePassword(this.passwordForm.value);
+    this.passwordForm.reset();
+    this.messageService.add({ detail: 'A jelszó megváltoztatása sikeres', severity: 'success' });
   }
 
   confirmDeleteProfile(): void {
@@ -63,7 +79,7 @@ export class ProfileComponent {
   }
 
   async deleteProfile(): Promise<void> {
-    
+
   }
 
 }

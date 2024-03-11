@@ -21,7 +21,14 @@
                         <input pInputText id="email" autofocus formControlName="email" autocomplete="off" type="search" />
                         <label for="email" class="required">E-mail</label>
                     </span>
-            
+                    <span class="p-float-label">
+                        <input pInputText id="course" autofocus formControlName="course" autocomplete="off" type="search" />
+                        <label for="course">Képzés</label>
+                    </span>
+                    <span class="p-float-label">
+                        <p-calendar inputId="membershipStart" formControlName="membershipStart"></p-calendar>
+                        <label for="membershipStart">Csatlakozás dátuma</label>
+                    </span>                
                     <p-button type="submit" label="Alapadatok módosítása" icon="pi pi-save" [disabled]="!basicDataForm.valid"></p-button>
                 </form>        
             </p-tabPanel>

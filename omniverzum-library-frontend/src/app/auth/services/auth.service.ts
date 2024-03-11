@@ -20,6 +20,7 @@ export class AuthService {
   async login(loginPayload: LoginPayloadDto): Promise<void> {
     const loginResponse = await firstValueFrom(this.http.post<LoginResponseDto>('/api/auth/login', loginPayload));
     this.userData = loginResponse.userData;
+    this.userData.membershipStart = new Date(this.userData.membershipStart);
     this.token = loginResponse.token;
     sessionStorage.setItem(this.sessionStorageKey, this.token);
   }
@@ -35,6 +36,7 @@ export class AuthService {
     const ownData = await firstValueFrom(this.http.get<UserDto>('/api/auth/own-data'));
     if (ownData) {
       this.userData = ownData;
+      this.userData.membershipStart = new Date(this.userData.membershipStart);
       return true;
     }
 

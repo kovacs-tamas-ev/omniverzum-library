@@ -22,8 +22,7 @@ import { DateFilterComponent } from '../../../shared/date-filter/date-filter.com
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TriStateCheckboxModule, CheckboxModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, DateFilterComponent],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss',
-  providers: [UserService]
+  styleUrl: './user-list.component.scss'
 })
 export class UserListComponent {
 
