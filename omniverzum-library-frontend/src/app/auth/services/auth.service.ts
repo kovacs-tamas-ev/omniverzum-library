@@ -4,6 +4,7 @@ import { UserDto } from '../../models/user/user.dto';
 import { LoginPayloadDto } from '../../models/auth/login-payload.dto';
 import { LoginResponseDto } from '../../models/auth/login-response.dto';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthService {
   private token?: string;
   private sessionStorageKey = 'omniverzum-token';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   async login(loginPayload: LoginPayloadDto): Promise<void> {
     const loginResponse = await firstValueFrom(this.http.post<LoginResponseDto>('/api/auth/login', loginPayload));
@@ -26,6 +27,7 @@ export class AuthService {
   async loadUserFromStoredTokenIfPresent(): Promise<boolean> {
     const storedToken = sessionStorage.getItem(this.sessionStorageKey);
     if (!storedToken) {
+      this.router.navigate(['/login']);
       return false;
     }
 
@@ -37,6 +39,7 @@ export class AuthService {
     }
 
     this.token = undefined;
+    this.router.navigate(['/login']);
     return false;
   }
 

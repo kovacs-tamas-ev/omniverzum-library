@@ -8,3 +8,7 @@ export interface ServerErrorDto {
     nature?: string;
     message: string;
 }
+
+export enum ErrorNature {
+    LOGIN = 'LOGIN'
+}
