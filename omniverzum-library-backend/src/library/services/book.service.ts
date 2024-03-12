@@ -6,8 +6,10 @@ import { CreateBookDto } from "../models/book/create-book.dto";
 import { BookDto } from "../models/book/book.dto";
 import { FilterBookDto } from "../models/book/filter-book.dto";
 import { isString } from "class-validator";
-import { mapAllToClass } from "src/utils/mappers";
+import { mapAllToClass, mapToClass } from "src/utils/mappers";
 import { validateObjectId } from "src/utils/object-utils";
+import { BookWithEventFiltersDto } from "../models/book-event/book-with-event-filters.dto";
+import { BasicBookEventDto, BookWithEventDto } from "../models/book-event/book-with-event.dto";
 
 @Injectable()
 export class BookService {
@@ -45,6 +47,35 @@ export class BookService {
     async deleteBook(id: string): Promise<void> {
         validateObjectId(id, 'Érvénytelen könyv azonosító');
         await this.bookModel.findByIdAndDelete(id);
+    }
+
+    async findBooksWithEvents(filters: BookWithEventFiltersDto): Promise<BookWithEventDto[]> {
+        const result = await this.bookModel.aggregate([
+            {
+              $lookup: {
+                from: 'bookevents',
+                localField: '_id',
+                foreignField: 'bookId',
+                as: 'events'
+              }
+            },
+            {
+              $project: {
+                book: '$$ROOT',
+                events: {
+                  userId: '$events.userId',
+                  eventType: '$events.eventType'
+                }
+              }
+            }
+          ]).exec();
+
+        return result.map(rawData => {
+            return {
+                book: mapToClass(BookDto, rawData.book),
+                events: rawData.events.map(event => mapToClass(BasicBookEventDto, event))
+            };
+        });
     }
 
 

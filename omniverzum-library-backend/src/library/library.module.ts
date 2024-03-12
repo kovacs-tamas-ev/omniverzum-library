@@ -10,6 +10,9 @@ import { ServerResponseInterceptor } from './interceptors/server-response.interc
 import { Book, BookSchema } from './schemas/book.schema';
 import { BookService } from './services/book.service';
 import { BookController } from './controllers/book.controller';
+import { BookEvent, BookEventSchema } from './schemas/book-event.schema';
+import { BookEventController } from './controllers/book-event.controller';
+import { BookEventService } from './services/book-event.service';
 
 @Module({
     imports: [
@@ -21,6 +24,10 @@ import { BookController } from './controllers/book.controller';
             {
               name: Book.name,
               schema: BookSchema
+            },
+            {
+              name: BookEvent.name,
+              schema: BookEventSchema
             }
           ]),      
         AuthModule
@@ -28,6 +35,7 @@ import { BookController } from './controllers/book.controller';
     providers: [
       UserService,
       BookService,
+      BookEventService,
       {
         provide: APP_FILTER,
         useClass: ServerExceptionFilter,
@@ -37,6 +45,6 @@ import { BookController } from './controllers/book.controller';
         useClass: ServerResponseInterceptor
       }
     ],
-    controllers: [UserController, BookController]
+    controllers: [UserController, BookController, BookEventController]
 })
 export class LibraryModule {}

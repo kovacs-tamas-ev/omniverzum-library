@@ -6,6 +6,7 @@ import { customValidationPipe } from "../exception-filters/custom-exception-fact
 import { BookDto } from "../models/book/book.dto";
 import { FilterBookDto } from "../models/book/filter-book.dto";
 import { BookService } from "../services/book.service";
+import { BookWithEventDto } from "../models/book-event/book-with-event.dto";
 
 @Controller('book')
 export class BookController {
@@ -32,6 +33,12 @@ export class BookController {
     async deleteUser(@Param('id') id: string): Promise<void> {
         await this.bookService.deleteBook(id);
     }
+
+    @Post('find-with-event')
+    async find(): Promise<BookWithEventDto[]> {
+        return await this.bookService.findBooksWithEvents({} as any);
+    }
+
 
 
 }
