@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post, UseGuards, UsePipes } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, Req, UseGuards, UsePipes } from "@nestjs/common";
 import { AdminJwtGuard } from "src/auth/guards/admin-jwt-guard";
 import { BasicJwtGuard } from "src/auth/guards/basic-jwt.guard";
 import { mapToClass } from "src/utils/mappers";
@@ -7,6 +7,9 @@ import { BookDto } from "../models/book/book.dto";
 import { FilterBookDto } from "../models/book/filter-book.dto";
 import { BookService } from "../services/book.service";
 import { BookWithEventDto } from "../models/book-event/book-with-event.dto";
+import { BookWithEventFiltersDto } from "../models/book-event/book-with-event-filters.dto";
+import { Request } from "express";
+import { UserDto } from "../models/user/user.dto";
 
 @Controller('book')
 export class BookController {
@@ -35,8 +38,10 @@ export class BookController {
     }
 
     @Post('find-with-event')
-    async find(): Promise<BookWithEventDto[]> {
-        return await this.bookService.findBooksWithEvents({} as any);
+    @UseGuards(BasicJwtGuard)
+    async findBooksWithBasicEvent(@Req() request: Request, @Body() filters: BookWithEventFiltersDto): Promise<BookWithEventDto[]> {
+        const tokenUserData = request.user! as UserDto;
+        return await this.bookService.findBooksWithEvents(tokenUserData._id, filters);
     }
 
 

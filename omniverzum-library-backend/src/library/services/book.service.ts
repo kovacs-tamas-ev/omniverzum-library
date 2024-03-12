@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { FilterQuery, Model } from "mongoose";
+import mongoose, { FilterQuery, Model } from "mongoose";
 import { Book } from "../schemas/book.schema";
 import { CreateBookDto } from "../models/book/create-book.dto";
 import { BookDto } from "../models/book/book.dto";
@@ -49,7 +49,24 @@ export class BookService {
         await this.bookModel.findByIdAndDelete(id);
     }
 
-    async findBooksWithEvents(filters: BookWithEventFiltersDto): Promise<BookWithEventDto[]> {
+    async findBooksWithEvents(tokenUserId: string, filters: BookWithEventFiltersDto): Promise<BookWithEventDto[]> {
+        const matchQuery = {} as Record<string, any>;
+
+        const bookFilters = filters.bookFilters;
+        if (bookFilters && Object.keys(bookFilters).length > 0) {
+            Object.keys(bookFilters).forEach(key => {
+                if (bookFilters[key] !== null && bookFilters[key] !== undefined) {
+                    matchQuery[`book.${key}`] = isString(bookFilters[key])
+                        ? { $regex: new RegExp(bookFilters[key], 'i') }
+                        : bookFilters[key];
+                }
+            });
+        }
+
+        if (filters && filters.myEvents) {
+            matchQuery['events.userId'] = new mongoose.Types.ObjectId(tokenUserId);
+        }
+
         const result = await this.bookModel.aggregate([
             {
               $lookup: {
@@ -67,6 +84,9 @@ export class BookService {
                   eventType: '$events.eventType'
                 }
               }
+            },
+            {
+                $match: matchQuery
             }
           ]).exec();
 
