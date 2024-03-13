@@ -13,8 +13,10 @@ export class BookEventService {
 
     constructor(@InjectModel(BookEvent.name) private bookEventModel: Model<BookEvent>) {}
 
-    async createBookEvent(createBookEventDto: CreateBookEventDto): Promise<void> {
-        await this.validateCreateBookEventData(createBookEventDto);
+
+
+    async createBookEvent(tokenUserIdStr: string, createBookEventDto: CreateBookEventDto): Promise<void> {
+        await this.validateCreateBookEventData(tokenUserIdStr, createBookEventDto);
         const createdAt = nullOutTimePart(new Date());
         const dueDate = addDays(createdAt, 30);
         const userNotified = false;
@@ -32,25 +34,47 @@ export class BookEventService {
 
         const newBookEvent = new this.bookEventModel(dtoToSave);
         await newBookEvent.save();
+        if (createBookEventDto.eventType === BookEventType.BORROW) {
+            this.cancelReservationIfPresent(tokenUserIdStr, createBookEventDto.bookId);
+        }
     }
 
-    private async validateCreateBookEventData(createBookEventDto: CreateBookEventDto): Promise<void> {
+    private async validateCreateBookEventData(tokenUserIdStr: string, createBookEventDto: CreateBookEventDto): Promise<void> {
+        const tokenUserId = new mongoose.Types.ObjectId(tokenUserIdStr);
         const filterQuery = {} as FilterQuery<BookEvent>;
         filterQuery.bookId = new mongoose.Types.ObjectId(createBookEventDto.bookId);
         const resultDocs = await this.bookEventModel.find(filterQuery).exec();
         const resultObjects = resultDocs.map(doc => doc.toObject());
 
-        const hasBorrowEvent = resultObjects.some(event => event.eventType === BookEventType.BORROW);
-        const hasReserveEvent = resultObjects.some(event => event.eventType === BookEventType.RESERVE);
+        const hasOthersBorrowEvent = resultObjects.some(event => event.eventType === BookEventType.BORROW && !event.userId.equals(tokenUserId));
+        const hasOthersReserveEvent = resultObjects.some(event => event.eventType === BookEventType.RESERVE && !event.userId.equals(tokenUserId));
+        const hasMyBorrowEvent = resultObjects.some(event => event.eventType === BookEventType.BORROW && event.userId.equals(tokenUserId));
+        const hasMyReserveEvent = resultObjects.some(event => event.eventType === BookEventType.RESERVE && event.userId.equals(tokenUserId));
 
-        if (hasReserveEvent) {
-            throw new ServerException({ message: 'A kívánt könyvre már van aktív foglalás, így jelenleg se kivenni, se lefoglalni nem lehet.' });
+        if (hasOthersReserveEvent) {
+            throw new ServerException({ message: 'A kívánt könyvet valaki más már lefoglalta, így jelenleg se kivenni, se lefoglalni nem lehet.' });
         }
-        if (hasBorrowEvent) {
-            if (createBookEventDto.eventType === BookEventType.BORROW) {
-                throw new ServerException({ message: 'A kívánt könyvet már kivették, így amív vissza nem hozzák, csak lefoglalni lehet.' });
+        if (hasMyBorrowEvent) {
+            throw new ServerException({ message: 'A kívánt könyvet Ön már kivette, így se lefoglalni, se újra kivenni nem tudja.' });
+        }
+
+        if (createBookEventDto.eventType === BookEventType.BORROW) {
+            if (hasOthersBorrowEvent) {
+                throw new ServerException({ message: 'A kívánt könyvet már kivették, így amív vissza nem hozzák, csak lefoglalni tudja.' });
+            }
+        } else if (createBookEventDto.eventType === BookEventType.RESERVE) {
+            if (hasMyReserveEvent) {
+                throw new ServerException({ message: 'A kívánt könyvre már van egy aktív foglalása.' });
             }
         }
+    }
+
+    async cancelReservationIfPresent(userId: string, bookId: string): Promise<void> {
+        const filterQuery = {} as FilterQuery<BookEvent>;
+        filterQuery.userId = new mongoose.Types.ObjectId(userId);
+        filterQuery.bookId = new mongoose.Types.ObjectId(bookId);
+        filterQuery.eventType = BookEventType.RESERVE;
+        await this.bookEventModel.deleteOne(filterQuery);
     }
 
 }
