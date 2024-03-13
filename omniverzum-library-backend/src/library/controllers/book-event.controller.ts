@@ -20,24 +20,33 @@ export class BookEventController {
             userId: tokenUserData._id,
             eventType: BookEventType.BORROW
         };
+        await this.bookEventService.createBookEvent(createBookEventDto);
     }
 
     @Post('reserve/:bookId')
     @UseGuards(BasicJwtGuard)
     async reserveBook(@Req() request: Request, @Param('bookId') bookId: string): Promise<void> {
         const tokenUserData = request.user! as UserDto;
+        const createBookEventDto: CreateBookEventDto = {
+            bookId,
+            userId: tokenUserData._id,
+            eventType: BookEventType.RESERVE
+        };
+        await this.bookEventService.createBookEvent(createBookEventDto);
     }
 
     @Post('return/:bookId')
     @UseGuards(BasicJwtGuard)
     async returnBook(@Req() request: Request, @Param('bookId') bookId: string): Promise<void> {
         const tokenUserData = request.user! as UserDto;
+        await this.bookEventService.returnBook(tokenUserData._id, bookId);
     }
 
     @Post('cancel-reservation/:bookId')
     @UseGuards(BasicJwtGuard)
     async cancelReservation(@Req() request: Request, @Param('bookId') bookId: string): Promise<void> {
         const tokenUserData = request.user! as UserDto;
+        await this.bookEventService.cancelReservation(tokenUserData._id, bookId);
     }
 
 }

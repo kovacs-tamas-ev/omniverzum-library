@@ -15,8 +15,8 @@ export class BookEventService {
 
 
 
-    async createBookEvent(tokenUserIdStr: string, createBookEventDto: CreateBookEventDto): Promise<void> {
-        await this.validateCreateBookEventData(tokenUserIdStr, createBookEventDto);
+    async createBookEvent(createBookEventDto: CreateBookEventDto): Promise<void> {
+        await this.validateCreateBookEventData(createBookEventDto);
         const createdAt = nullOutTimePart(new Date());
         const dueDate = addDays(createdAt, 30);
         const userNotified = false;
@@ -35,21 +35,20 @@ export class BookEventService {
         const newBookEvent = new this.bookEventModel(dtoToSave);
         await newBookEvent.save();
         if (createBookEventDto.eventType === BookEventType.BORROW) {
-            this.cancelReservationIfPresent(tokenUserIdStr, createBookEventDto.bookId);
+            this.cancelReservation(createBookEventDto.userId, createBookEventDto.bookId);
         }
     }
 
-    private async validateCreateBookEventData(tokenUserIdStr: string, createBookEventDto: CreateBookEventDto): Promise<void> {
-        const tokenUserId = new mongoose.Types.ObjectId(tokenUserIdStr);
+    private async validateCreateBookEventData(createBookEventDto: CreateBookEventDto): Promise<void> {
         const filterQuery = {} as FilterQuery<BookEvent>;
         filterQuery.bookId = new mongoose.Types.ObjectId(createBookEventDto.bookId);
         const resultDocs = await this.bookEventModel.find(filterQuery).exec();
         const resultObjects = resultDocs.map(doc => doc.toObject());
 
-        const hasOthersBorrowEvent = resultObjects.some(event => event.eventType === BookEventType.BORROW && !event.userId.equals(tokenUserId));
-        const hasOthersReserveEvent = resultObjects.some(event => event.eventType === BookEventType.RESERVE && !event.userId.equals(tokenUserId));
-        const hasMyBorrowEvent = resultObjects.some(event => event.eventType === BookEventType.BORROW && event.userId.equals(tokenUserId));
-        const hasMyReserveEvent = resultObjects.some(event => event.eventType === BookEventType.RESERVE && event.userId.equals(tokenUserId));
+        const hasOthersBorrowEvent = resultObjects.some(event => event.eventType === BookEventType.BORROW && !event.userId.equals(createBookEventDto.userId));
+        const hasOthersReserveEvent = resultObjects.some(event => event.eventType === BookEventType.RESERVE && !event.userId.equals(createBookEventDto.userId));
+        const hasMyBorrowEvent = resultObjects.some(event => event.eventType === BookEventType.BORROW && event.userId.equals(createBookEventDto.userId));
+        const hasMyReserveEvent = resultObjects.some(event => event.eventType === BookEventType.RESERVE && event.userId.equals(createBookEventDto.userId));
 
         if (hasOthersReserveEvent) {
             throw new ServerException({ message: 'A kívánt könyvet valaki más már lefoglalta, így jelenleg se kivenni, se lefoglalni nem lehet.' });
@@ -69,11 +68,19 @@ export class BookEventService {
         }
     }
 
-    async cancelReservationIfPresent(userId: string, bookId: string): Promise<void> {
+    async cancelReservation(userId: string, bookId: string): Promise<void> {
+        return this.deleteOne(userId, bookId, BookEventType.RESERVE);
+    }
+
+    async returnBook(userId: string, bookId: string): Promise<void> {
+        return this.deleteOne(userId, bookId, BookEventType.BORROW);
+    }
+
+    private async deleteOne(userId: string, bookId: string, eventType: BookEventType): Promise<void> {
         const filterQuery = {} as FilterQuery<BookEvent>;
         filterQuery.userId = new mongoose.Types.ObjectId(userId);
         filterQuery.bookId = new mongoose.Types.ObjectId(bookId);
-        filterQuery.eventType = BookEventType.RESERVE;
+        filterQuery.eventType = eventType;
         await this.bookEventModel.deleteOne(filterQuery);
     }
 
