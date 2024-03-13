@@ -59,7 +59,7 @@ export class BookEventService {
 
         if (createBookEventDto.eventType === BookEventType.BORROW) {
             if (hasOthersBorrowEvent) {
-                throw new ServerException({ message: 'A kívánt könyvet már kivették, így amív vissza nem hozzák, csak lefoglalni tudja.' });
+                throw new ServerException({ message: 'A kívánt könyvet már kivették, így amíg vissza nem hozzák, csak lefoglalni tudja.' });
             }
         } else if (createBookEventDto.eventType === BookEventType.RESERVE) {
             if (hasMyReserveEvent) {
