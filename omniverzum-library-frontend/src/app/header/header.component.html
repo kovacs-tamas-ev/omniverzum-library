@@ -19,14 +19,17 @@
 
     <div id="link-row" *ngIf="authService.hasToken()">
         <!-- Admin pages -->
-        <span class="link-with-icon">
-            <i class="pi pi-users"></i>
-            <a routerLink="/user-list" routerLinkActive="active-link" *ngIf="authService.getUserData()?.admin">Tagok</a>
-        </span>
-        <span class="link-with-icon">
-            <i class="pi pi-book"></i>
-            <a routerLink="/book-list" routerLinkActive="active-link" *ngIf="authService.getUserData()?.admin">Könyvek</a>
-        </span>
+        <ng-container>
+            <span class="link-with-icon">
+                <i class="pi pi-users"></i>
+                <a routerLink="/user-list" routerLinkActive="active-link" *ngIf="authService.getUserData()?.admin">Tagok</a>
+            </span>
+            <span class="link-with-icon">
+                <i class="pi pi-book"></i>
+                <a routerLink="/book-list" routerLinkActive="active-link" *ngIf="authService.getUserData()?.admin">Könyvek</a>
+            </span>
+            <span class="link-with-icon link-separator"></span>
+        </ng-container>
         <!-- Reader pages -->
         <span class="link-with-icon">
             <i class="pi pi-book"></i>
