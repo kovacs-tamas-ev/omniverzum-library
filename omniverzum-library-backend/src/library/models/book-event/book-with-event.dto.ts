@@ -1,9 +1,8 @@
 import { BookDto } from "../book/book.dto";
 import { BookEventType } from "./book-event-type";
 
-export class BookWithEventDto {
+export class BookWithEventDto extends BookDto {
 
-    book: BookDto = undefined;
     events: BasicBookEventDto[] = [];
 
 }

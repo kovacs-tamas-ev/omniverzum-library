@@ -1,9 +1,8 @@
 import { BookDto } from "../book/book.dto";
 import { BookEventType } from "./book-event-type";
 
-export interface BookWithEventDto {
+export interface BookWithEventDto extends BookDto {
 
-    book: BookDto;
     events: BasicBookEventDto[];
 
 }

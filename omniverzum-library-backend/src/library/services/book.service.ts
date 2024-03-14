@@ -77,25 +77,11 @@ export class BookService {
               }
             },
             {
-              $project: {
-                book: '$$ROOT',
-                events: {
-                  userId: '$events.userId',
-                  eventType: '$events.eventType'
-                }
-              }
-            },
-            {
                 $match: matchQuery
             }
           ]).exec();
 
-        return result.map(rawData => {
-            return {
-                book: mapToClass(BookDto, rawData.book),
-                events: rawData.events.map(event => mapToClass(BasicBookEventDto, event))
-            };
-        });
+        return mapAllToClass(BookWithEventDto, result);
     }
 
 

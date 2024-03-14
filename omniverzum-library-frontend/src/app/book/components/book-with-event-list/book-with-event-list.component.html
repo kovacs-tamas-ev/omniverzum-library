@@ -59,7 +59,10 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-book>
-                <tr>
+                <tr [class.my-borrowed]="book.state.myBorrowed"
+                    [class.my-reserved]="book.state.myReserved"
+                    [class.others-borrowed]="book.state.othersBorrowed"
+                    [class.others-reserved]="book.state.othersReserved">
                     <td><span class="p-column-title">Leltári szám:</span>{{ book.inventoryNumber }}</td>
                     <td><span class="p-column-title">Író/szerkesztő:</span>{{ book.author }}</td>
                     <td><span class="p-column-title">Cím:</span>{{ book.title }}</td>
@@ -69,10 +72,10 @@
                     <td><span class="p-column-title">ISBN:</span>{{ book.isbn }}</td>
                     <td>
                         <span class="p-column-title">Műveletek:</span>
-                        <i class="pi pi-book icon-button success-color" *ngIf="!book.state.myBorrowed && !book.state.othersBorrowed && !book.state.othersReserved" pTooltip="Kikölcsönzöm"></i>
-                        <i class="pi pi-replay icon-button success-color" *ngIf="book.state.myBorrowed" pTooltip="Visszahoztam"></i>
-                        <i class="pi pi-cart-plus icon-button cyan-color" *ngIf="!book.state.myBorrowed && !book.state.myReserved && !book.state.othersReserved" pTooltip="Lefoglalom"></i>
-                        <i class="pi pi-delete-left icon-button cyan-color" *ngIf="book.state.myReserved" pTooltip="Törlöm a foglalást"></i>
+                        <i class="pi pi-book icon-button borrow-icon" *ngIf="!book.state.myBorrowed && !book.state.othersBorrowed && !book.state.othersReserved" pTooltip="Kikölcsönzöm" (click)="borrow(book)"></i>
+                        <i class="pi pi-replay icon-button return-icon" *ngIf="book.state.myBorrowed" pTooltip="Visszahoztam" (click)="returnBook(book)"></i>
+                        <i class="pi pi-cart-plus icon-button reserve-icon" *ngIf="!book.state.myBorrowed && !book.state.myReserved && !book.state.othersReserved" pTooltip="Lefoglalom" (click)="reserve(book)"></i>
+                        <i class="pi pi-delete-left icon-button cancel-reservation-icon" *ngIf="book.state.myReserved" pTooltip="Törlöm a foglalást" (click)="cancelReservation(book)"></i>
                     </td>
                 </tr>
             </ng-template>

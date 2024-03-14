@@ -12,3 +12,34 @@ form, .filter-form {
     display: flex;
     flex-wrap: nowrap;
 }
+
+.list-section::ng-deep {
+    .borrow-icon {
+        color: var(--green-500);
+    }
+    .return-icon {
+        color: var(--green-700);
+    }
+    .reserve-icon {
+        color: var(--blue-500);
+    }
+    .cancel-reservation-icon {
+        color: var(--blue-600);
+    }
+
+    .others-borrowed {
+        background-color: var(--yellow-100);
+    }
+    .others-reserved {
+        background-color: var(--red-100);
+    }
+    .my-borrowed {
+        background-color: var(--green-100);
+    }
+    .my-reserved {
+        background-color: var(--blue-100);
+        .borrow-icon {
+            color: var(--green-600);
+        }    
+    }
+}
