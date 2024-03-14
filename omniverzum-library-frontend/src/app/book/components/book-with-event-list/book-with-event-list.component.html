@@ -5,8 +5,8 @@
     </div>
 
     <section class="filter-container">
-        <form [formGroup]="filterForm" class="filter-form" (keydown.enter)="filter()">
-            <div formGroupName="bookFilters">
+        <form [formGroup]="filterForm" (keydown.enter)="filter()">
+            <div formGroupName="bookFilters" class="filter-form">
                 <span class="p-float-label">
                     <p-inputNumber formControlName="inventoryNumber" mode="decimal" inputId="search-inventoryNumber" [useGrouping]="false"> </p-inputNumber>
                     <label for="number-input">Leltári szám</label>
