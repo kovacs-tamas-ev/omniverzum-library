@@ -49,26 +49,31 @@ export class BookService {
     }
 
     async findBooksWithEvents(tokenUserId: string, filters: BookWithEventFiltersDto): Promise<BookWithEventDto[]> {
-        const matchQuery = {} as Record<string, any>;
+        const bookMatchQuery = {} as Record<string, any>;
+        const evnetsMatchQuery = {} as Record<string, any>;
 
         const bookFilters = filters.bookFilters;
         if (bookFilters && Object.keys(bookFilters).length > 0) {
             Object.keys(bookFilters).forEach(key => {
                 if (bookFilters[key] !== null && bookFilters[key] !== undefined) {
-                    matchQuery[`book.${key}`] = isString(bookFilters[key])
+                    bookMatchQuery[key] = isString(bookFilters[key])
                         ? { $regex: new RegExp(bookFilters[key], 'i') }
                         : bookFilters[key];
                 }
             });
         }
 
+
         if (filters && filters.myEvents !== null && filters.myEvents !== undefined) {
             const tokenUserIdAsObject = new mongoose.Types.ObjectId(tokenUserId);
             const userIdFilter = filters.myEvents ? tokenUserIdAsObject : { $ne: tokenUserIdAsObject };
-            matchQuery['events.userId'] = userIdFilter;
+            evnetsMatchQuery['events.userId'] = userIdFilter;
         }
 
         const result = await this.bookModel.aggregate([
+            {
+                $match: bookMatchQuery
+            },
             {
               $lookup: {
                 from: 'bookevents',
@@ -78,7 +83,7 @@ export class BookService {
               }
             },
             {
-                $match: matchQuery
+                $match: evnetsMatchQuery
             }
           ]).exec();
 
