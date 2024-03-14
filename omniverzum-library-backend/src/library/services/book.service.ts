@@ -1,15 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import mongoose, { FilterQuery, Model } from "mongoose";
-import { Book } from "../schemas/book.schema";
-import { CreateBookDto } from "../models/book/create-book.dto";
-import { BookDto } from "../models/book/book.dto";
-import { FilterBookDto } from "../models/book/filter-book.dto";
 import { isString } from "class-validator";
-import { mapAllToClass, mapToClass } from "src/utils/mappers";
+import mongoose, { FilterQuery, Model } from "mongoose";
+import { mapAllToClass } from "src/utils/mappers";
 import { validateObjectId } from "src/utils/object-utils";
 import { BookWithEventFiltersDto } from "../models/book-event/book-with-event-filters.dto";
-import { BasicBookEventDto, BookWithEventDto } from "../models/book-event/book-with-event.dto";
+import { BookWithEventDto } from "../models/book-event/book-with-event.dto";
+import { BookDto } from "../models/book/book.dto";
+import { FilterBookDto } from "../models/book/filter-book.dto";
+import { Book } from "../schemas/book.schema";
 
 @Injectable()
 export class BookService {
@@ -63,8 +62,10 @@ export class BookService {
             });
         }
 
-        if (filters && filters.myEvents) {
-            matchQuery['events.userId'] = new mongoose.Types.ObjectId(tokenUserId);
+        if (filters && filters.myEvents !== null && filters.myEvents !== undefined) {
+            const tokenUserIdAsObject = new mongoose.Types.ObjectId(tokenUserId);
+            const userIdFilter = filters.myEvents ? tokenUserIdAsObject : { $ne: tokenUserIdAsObject };
+            matchQuery['events.userId'] = userIdFilter;
         }
 
         const result = await this.bookModel.aggregate([
