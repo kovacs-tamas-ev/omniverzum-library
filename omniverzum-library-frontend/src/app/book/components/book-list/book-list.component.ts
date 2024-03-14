@@ -18,8 +18,7 @@ import { BookService } from '../../services/book.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, InputNumberModule],
   templateUrl: './book-list.component.html',
-  styleUrl: './book-list.component.scss',
-  providers: [BookService]
+  styleUrl: './book-list.component.scss'
 })
 export class BookListComponent {
 
@@ -96,8 +95,6 @@ export class BookListComponent {
       return;
     }
 
-    console.log(`editing: ${this.isEditing}`);
-    
     await this.bookService.createOrUpdateBook(this.bookForm.value);
     const successMessage = this.isEditing
       ? `A(z) <strong>${this.bookForm.value.title}</strong> című könyv adatait sikeresen módosítottuk`

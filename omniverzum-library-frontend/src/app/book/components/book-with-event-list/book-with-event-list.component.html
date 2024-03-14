@@ -1,0 +1,82 @@
+<div class="main-container">
+
+    <div class="header-row">
+        <h2 class="heading">Elérhető könyvek</h2>
+    </div>
+
+    <section class="filter-container">
+        <form [formGroup]="filterForm" class="filter-form" (keydown.enter)="filter()">
+            <div formGroupName="bookFilters">
+                <span class="p-float-label">
+                    <p-inputNumber formControlName="inventoryNumber" mode="decimal" inputId="search-inventoryNumber" [useGrouping]="false"> </p-inputNumber>
+                    <label for="number-input">Leltári szám</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="search-author" formControlName="author" autocomplete="off" type="search"/>
+                    <label for="search-author">Író/szerkesztő</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="search-title" formControlName="title" autocomplete="off" type="search"/>
+                    <label for="search-title">Cím</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="search-genre" formControlName="genre" autocomplete="off" type="search"/>
+                    <label for="search-genre">Műfaj</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="search-subjectArea" formControlName="subjectArea" autocomplete="off" type="search"/>
+                    <label for="search-subjectArea">Tárgykör</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="search-publisher" formControlName="publisher" autocomplete="off" type="search"/>
+                    <label for="search-publisher">Kiadó</label>
+                </span>
+                <span class="p-float-label">
+                    <input pInputText id="search-isbn" formControlName="isbn" autocomplete="off" type="search"/>
+                    <label for="search-isbn">ISBN</label>
+                </span>    
+            </div>
+            <p-triStateCheckbox inputId="my-events" label="Saját kölcsönzéseim/foglalásaim" formControlName="myEvents"></p-triStateCheckbox>
+        </form>
+        <div class="button-container">
+            <p-button (onClick)="resetFilters()" icon="pi pi-delete-left" severity="danger" label="Szűrők törlése"></p-button>
+            <p-button type="button" icon="pi pi-search" (onClick)="filter()" label="Szűrés"></p-button>
+        </div>
+    </section>    
+
+    <section class="list-section">
+        <p-table [value]="bookWithEventsList" responsiveLayout="stack" [breakpoint]="'1000px'">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Leltári szám</th>
+                    <th>Író/szerkesztő</th>
+                    <th>Cím</th>
+                    <th>Műfaj</th>
+                    <th>Tárgykör</th>
+                    <th>Kiadó</th>
+                    <th>ISBN</th>
+                    <th>Műveletek</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-book>
+                <tr>
+                    <td><span class="p-column-title">Leltári szám:</span>{{ book.inventoryNumber }}</td>
+                    <td><span class="p-column-title">Író/szerkesztő:</span>{{ book.author }}</td>
+                    <td><span class="p-column-title">Cím:</span>{{ book.title }}</td>
+                    <td><span class="p-column-title">Műfaj:</span>{{ book.genre }}</td>
+                    <td><span class="p-column-title">Tárgykör:</span>{{ book.subjectArea }}</td>
+                    <td><span class="p-column-title">Kiadó:</span>{{ book.publisher }}</td>
+                    <td><span class="p-column-title">ISBN:</span>{{ book.isbn }}</td>
+                    <td>
+                        <span class="p-column-title">Műveletek:</span>
+                        <i class="pi pi-book icon-button success-color" *ngIf="!book.state.myBorrowed && !book.state.othersBorrowed && !book.state.othersReserved" pTooltip="Kikölcsönzöm"></i>
+                        <i class="pi pi-replay icon-button success-color" *ngIf="book.state.myBorrowed" pTooltip="Visszahoztam"></i>
+                        <i class="pi pi-cart-plus icon-button cyan-color" *ngIf="!book.state.myBorrowed && !book.state.myReserved && !book.state.othersReserved" pTooltip="Lefoglalom"></i>
+                        <i class="pi pi-delete-left icon-button cyan-color" *ngIf="book.state.myReserved" pTooltip="Törlöm a foglalást"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>        
+    </section>
+
+</div>

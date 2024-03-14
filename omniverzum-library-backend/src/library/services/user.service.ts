@@ -70,9 +70,9 @@ export class UserService {
                 filterQuery.membershipStart = { $lt: membershipStartFilter.before };
             } else if (membershipStartFilter.after) {
                 membershipStartFilter.after = new Date(membershipStartFilter.after);
-                membershipStartFilter.before.setHours(0);
-                membershipStartFilter.before.setMinutes(0);
-                membershipStartFilter.before.setSeconds(0);
+                membershipStartFilter.after.setHours(0);
+                membershipStartFilter.after.setMinutes(0);
+                membershipStartFilter.after.setSeconds(0);
                 filterQuery.membershipStart = { $gt: membershipStartFilter.after };
             }
         }

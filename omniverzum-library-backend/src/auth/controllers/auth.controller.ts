@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Post, Req, UseGuards, UsePipes } from "@nestjs/common";
+import { Request } from 'express';
 import { customValidationPipe } from "src/library/exception-filters/custom-exception-factory";
 import { ServerException } from "src/library/models/general/server-exception";
-import { LoginPayloadDto } from "../models/login-payload.dto";
-import { AuthService } from "../services/auth.service";
-import { BasicJwtGuard } from "../guards/basic-jwt.guard";
-import { LoginResponseDto } from "../models/login-response.dto";
 import { UserDto } from "src/library/models/user/user.dto";
-import { Request } from 'express';
+import { BasicJwtGuard } from "../guards/basic-jwt.guard";
+import { LoginPayloadDto } from "../models/login-payload.dto";
+import { LoginResponseDto } from "../models/login-response.dto";
+import { AuthService } from "../services/auth.service";
 
 @Controller('auth')
 export class AuthController {

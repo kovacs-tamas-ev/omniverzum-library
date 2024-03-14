@@ -27,6 +27,7 @@ import { DateFilterComponent } from '../../../shared/date-filter/date-filter.com
 export class UserListComponent {
 
   filterForm!: FormGroup;
+
   userList: UserDto[] = [];
   userDialogVisible = false;
 

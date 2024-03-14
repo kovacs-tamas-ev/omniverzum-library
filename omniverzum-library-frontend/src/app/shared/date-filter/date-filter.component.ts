@@ -91,9 +91,9 @@ export class DateFilterComponent implements ControlValueAccessor, AfterContentIn
     if (newValue.range) {
       this.form.patchValue({ dateValue: newValue.range, mode: DateFilterModes.RANGE });
     } else if (newValue.before) {
-      this.form.patchValue({ dateValue: newValue.range, mode: DateFilterModes.BEFORE });
+      this.form.patchValue({ dateValue: newValue.before, mode: DateFilterModes.BEFORE });
     } else {
-      this.form.patchValue({ dateValue: newValue.range, mode: DateFilterModes.AFTER });
+      this.form.patchValue({ dateValue: newValue.after, mode: DateFilterModes.AFTER });
     }
   }
 
