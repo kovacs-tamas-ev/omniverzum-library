@@ -22,15 +22,15 @@
         <ng-container *ngIf="authService.getUserData()?.admin">
             <span class="link-with-icon">
                 <i class="pi pi-users"></i>
-                <a routerLink="/user-list" routerLinkActive="active-link" >Tagok</a>
+                <a routerLink="/admin/user-list" routerLinkActive="active-link" >Tagok</a>
             </span>
             <span class="link-with-icon">
                 <i class="pi pi-book"></i>
-                <a routerLink="/book-list" routerLinkActive="active-link">Könyvek</a>
+                <a routerLink="/admin/book-list" routerLinkActive="active-link">Könyvek</a>
             </span>
             <span class="link-with-icon">
                 <i class="pi pi-upload"></i>
-                <a routerLink="/book-import" routerLinkActive="active-link">Import fájl</a>
+                <a routerLink="/admin/book-import" routerLinkActive="active-link">Import fájl</a>
             </span>
             <span class="link-with-icon link-separator"></span>
         </ng-container>

@@ -5,6 +5,7 @@ import { BookListComponent } from './book/components/book-list/book-list.compone
 import { ProfileComponent } from './user/components/profile/profile.component';
 import { BookWithEventListComponent } from './book/components/book-with-event-list/book-with-event-list.component';
 import { UploadComponent } from './book/components/upload/upload.component';
+import { adminGuard } from './auth/guards/admin.guard';
 
 export const routes: Routes = [
     {
@@ -12,23 +13,31 @@ export const routes: Routes = [
         component: LoginComponent
     },
     {
-        path: 'user-list',
-        component: UserListComponent
-    },
-    {
-        path: 'book-list',
-        component: BookListComponent
+        path: 'profile',
+        component: ProfileComponent
     },
     {
         path: 'available-books',
         component: BookWithEventListComponent
     },
+
     {
-        path: 'book-import',
-        component: UploadComponent
-    },
-    {
-        path: 'profile',
-        component: ProfileComponent
+        path: 'admin',
+        canActivateChild: [adminGuard],
+        children: [
+            {
+                path: 'user-list',
+                component: UserListComponent
+            },
+            {
+                path: 'book-list',
+                component: BookListComponent
+            },
+            {
+                path: 'book-import',
+                component: UploadComponent
+            }        
+        ]
     }
+
 ];
