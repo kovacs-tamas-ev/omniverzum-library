@@ -8,17 +8,20 @@
 
             <p-tabPanel header="Alapadatok">
             
-                <form [formGroup]="basicDataForm" (ngSubmit)="changeBasicData()">
+                <form [formGroup]="basicDataForm" class="error-display" (ngSubmit)="changeBasicData()">
                     <span class="p-float-label">
                         <input pInputText id="username" autofocus formControlName="username" autocomplete="off" type="search" />
+                        <app-error-displayer [control]="basicDataForm.get('username')"></app-error-displayer>
                         <label for="username" class="required">Felhasználónév</label>
                     </span>
                     <span class="p-float-label">
                         <input pInputText id="fullName" autofocus formControlName="fullName" autocomplete="off" type="search" />
+                        <app-error-displayer [control]="basicDataForm.get('fullName')"></app-error-displayer>
                         <label for="fullName" class="required">Teljes név</label>
                     </span>
                     <span class="p-float-label">
                         <input pInputText id="email" autofocus formControlName="email" autocomplete="off" type="search" />
+                        <app-error-displayer [control]="basicDataForm.get('email')"></app-error-displayer>
                         <label for="email" class="required">E-mail</label>
                     </span>
                     <span class="p-float-label">
@@ -34,13 +37,15 @@
             </p-tabPanel>
 
             <p-tabPanel header="Jelszó">
-                <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+                <form class="error-display" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
                     <span class="p-float-label">
                         <p-password id="password" formControlName="password" [feedback]="false" autocomplete="off" type="search"></p-password>
+                        <app-error-displayer [control]="passwordForm.get('password')"></app-error-displayer>
                         <label for="password" class="required">Új jelszó</label>
                     </span>
                     <span class="p-float-label">
                         <p-password id="rePassword" formControlName="rePassword" [feedback]="false" autocomplete="off" type="search"></p-password>
+                        <app-error-displayer [control]="passwordForm.get('rePassword')"></app-error-displayer>
                         <label for="rePassword" class="required">Új jelszó megismétlése</label>
                     </span>
                     <p-button type="submit" label="Jelszó módosítása" icon="pi pi-save" [disabled]="!passwordForm.valid"></p-button>

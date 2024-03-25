@@ -77,21 +77,25 @@
 
 <p-dialog [(visible)]="userDialogVisible" [header]="dialogHeader" [draggable]="false" [resizable]="false" [modal]="true">
 
-    <form class="dialog-form" [formGroup]="userForm" (keydown.enter)="saveUser()">
+    <form class="dialog-form error-display" [formGroup]="userForm" (keydown.enter)="saveUser()">
         <span class="p-float-label">
             <input pInputText id="fullName" formControlName="fullName" autocomplete="off" type="search"/>
+            <app-error-displayer [control]="userForm.get('fullName')"></app-error-displayer>
             <label for="fullName" class="required">Név</label>
         </span>
         <span class="p-float-label" *ngIf="isEditing">
             <input pInputText id="username" formControlName="username" autocomplete="off" type="search"/>
+            <app-error-displayer [control]="userForm.get('username')"></app-error-displayer>
             <label for="username" class="required">Felhasználónév</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="email" formControlName="email" autocomplete="off" type="search"/>
+            <app-error-displayer [control]="userForm.get('email')"></app-error-displayer>
             <label for="email" class="required">E-mail cím</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="course" formControlName="course" autocomplete="off" type="search"/>
+            <app-error-displayer [control]="userForm.get('course')"></app-error-displayer>
             <label for="course" class="required">Képzés</label>
         </span>
         <p-checkbox label="Admin" formControlName="admin" [binary]="true"></p-checkbox>

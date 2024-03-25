@@ -81,17 +81,20 @@
 
 <p-dialog [(visible)]="bookDialogVisible" [header]="dialogHeader" [draggable]="false" [resizable]="false" [modal]="true">
 
-    <form class="dialog-form" [formGroup]="bookForm" (keydown.enter)="saveBook()">
+    <form class="dialog-form error-display" [formGroup]="bookForm" (keydown.enter)="saveBook()">
         <span class="p-float-label">
             <p-inputNumber formControlName="inventoryNumber" mode="decimal" inputId="search-inventoryNumber" [useGrouping]="false"> </p-inputNumber>
+            <app-error-displayer [control]="bookForm.get('inventoryNumber')"></app-error-displayer>
             <label for="number-input" class="required">Leltári szám</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="title" formControlName="title" autocomplete="off" type="search"/>
+            <app-error-displayer [control]="bookForm.get('title')"></app-error-displayer>
             <label for="title" class="required">Cím</label>
         </span>
         <span class="p-float-label">
             <input pInputText id="author" formControlName="author" autocomplete="off" type="search"/>
+            <app-error-displayer [control]="bookForm.get('author')"></app-error-displayer>
             <label for="author" class="required">Író/szerkesztő</label>
         </span>
         <span class="p-float-label">

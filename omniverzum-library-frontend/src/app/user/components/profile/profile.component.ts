@@ -13,11 +13,12 @@ import { UserDto } from '../../../models/user/user.dto';
 import { connectControlsValidation, markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { ErrorDisplayerComponent } from '../../../shared/error-displayer/error-displayer.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, TabViewModule, InputTextModule, PasswordModule, ButtonModule, CalendarModule],
+  imports: [CommonModule, ReactiveFormsModule, CardModule, TabViewModule, InputTextModule, PasswordModule, ButtonModule, CalendarModule, ErrorDisplayerComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })

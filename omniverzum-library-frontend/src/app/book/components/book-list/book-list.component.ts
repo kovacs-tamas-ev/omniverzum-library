@@ -13,11 +13,12 @@ import { BookDto } from '../../../models/book/book.dto';
 import { markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
 import { BookService } from '../../services/book.service';
 import { UploadComponent } from '../upload/upload.component';
+import { ErrorDisplayerComponent } from '../../../shared/error-displayer/error-displayer.component';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, InputNumberModule, UploadComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, InputNumberModule, UploadComponent, ErrorDisplayerComponent],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss'
 })

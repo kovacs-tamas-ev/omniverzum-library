@@ -1,26 +1,27 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
-import { UserService } from '../../services/user.service';
-import { TableModule } from 'primeng/table';
-import { UserDto } from '../../../models/user/user.dto';
-import { CommonModule } from '@angular/common';
-import { TooltipModule } from 'primeng/tooltip';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
 import { AuthService } from '../../../auth/services/auth.service';
-import { markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
+import { UserDto } from '../../../models/user/user.dto';
 import { DateFilterComponent } from '../../../shared/date-filter/date-filter.component';
+import { ErrorDisplayerComponent } from '../../../shared/error-displayer/error-displayer.component';
+import { markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
+import { UserService } from '../../services/user.service';
 
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TriStateCheckboxModule, CheckboxModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, DateFilterComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TriStateCheckboxModule, CheckboxModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, DateFilterComponent, ErrorDisplayerComponent],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
 })
