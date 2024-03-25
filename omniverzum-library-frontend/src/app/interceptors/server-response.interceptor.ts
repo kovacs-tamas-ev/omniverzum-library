@@ -9,7 +9,7 @@ export const serverResponseInterceptor: HttpInterceptorFn = (req, next) => {
         return response;
       }
 
-      if (response instanceof HttpResponse ) {
+      if (response instanceof HttpResponse) {
         const responseAsHttpResponse = response as HttpResponse<ServerResponseDto<any>>;
         return responseAsHttpResponse.clone({ body: responseAsHttpResponse.body?.data });
       }

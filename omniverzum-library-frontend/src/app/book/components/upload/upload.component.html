@@ -1,0 +1,34 @@
+<div>
+    <p-fileUpload mode="basic" chooseLabel="Fájl" accept=".xls" [customUpload]="true" (uploadHandler)="handleUpload($event)"></p-fileUpload>
+
+    <section class="list-section" *ngIf="failedImports.length > 0">
+        <h3>Sikertelen importálások</h3>
+        <p-table [value]="failedImports" responsiveLayout="stack" [breakpoint]="'1000px'">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Hiba oka</th>
+                    <th>Leltári szám</th>
+                    <th>Író/szerkesztő</th>
+                    <th>Cím</th>
+                    <th>Műfaj</th>
+                    <th>Tárgykör</th>
+                    <th>Kiadó</th>
+                    <th>ISBN</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-book>
+                <tr>
+                    <td class="error-color"><span class="p-column-title">Hiba oka:</span>{{ book.errorMessage }}</td>
+                    <td><span class="p-column-title">Leltári szám:</span>{{ book.inventoryNumber }}</td>
+                    <td><span class="p-column-title">Író/szerkesztő:</span>{{ book.author }}</td>
+                    <td><span class="p-column-title">Cím:</span>{{ book.title }}</td>
+                    <td><span class="p-column-title">Műfaj:</span>{{ book.genre }}</td>
+                    <td><span class="p-column-title">Tárgykör:</span>{{ book.subjectArea }}</td>
+                    <td><span class="p-column-title">Kiadó:</span>{{ book.publisher }}</td>
+                    <td><span class="p-column-title">ISBN:</span>{{ book.isbn }}</td>
+                </tr>
+            </ng-template>
+        </p-table>        
+    </section>
+
+</div>

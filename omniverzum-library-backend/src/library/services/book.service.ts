@@ -9,20 +9,30 @@ import { BookWithEventDto } from "../models/book-event/book-with-event.dto";
 import { BookDto } from "../models/book/book.dto";
 import { FilterBookDto } from "../models/book/filter-book.dto";
 import { Book } from "../schemas/book.schema";
+import { CreateBookDto } from "../models/book/create-book.dto";
 
 @Injectable()
 export class BookService {
 
     constructor(@InjectModel(Book.name) private bookModel: Model<Book>) {}
 
-    async createOrUpdateBook(book: BookDto): Promise<void> {
-        const { _id, ...bookData } = book;
-        if (_id) {
-            await this.bookModel.findByIdAndUpdate(_id, bookData);
-        } else {
-            const newBook = new this.bookModel(bookData);
+    async createOrUpdateBook(book: BookDto | CreateBookDto): Promise<void> {
+        if (book instanceof CreateBookDto) {
+            const newBook = new this.bookModel(book);
             await newBook.save();    
+        } else {
+            const { _id, ...bookData } = book;
+            if (_id) {
+                await this.bookModel.findByIdAndUpdate(_id, bookData);
+            } else {
+                const newBook = new this.bookModel(bookData);
+                await newBook.save();    
+            }    
         }
+    }
+
+    async createMany(books: CreateBookDto[]): Promise<void> {
+        await this.bookModel.insertMany(books);
     }
 
     async findBooks(filters: FilterBookDto): Promise<BookDto[]> {

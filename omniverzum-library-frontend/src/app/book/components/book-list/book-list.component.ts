@@ -12,11 +12,12 @@ import { TooltipModule } from 'primeng/tooltip';
 import { BookDto } from '../../../models/book/book.dto';
 import { markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
 import { BookService } from '../../services/book.service';
+import { UploadComponent } from '../upload/upload.component';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, InputNumberModule],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TableModule, TooltipModule, ConfirmDialogModule, DialogModule, InputNumberModule, UploadComponent],
   templateUrl: './book-list.component.html',
   styleUrl: './book-list.component.scss'
 })

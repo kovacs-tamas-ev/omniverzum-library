@@ -13,6 +13,8 @@ import { BookController } from './controllers/book.controller';
 import { BookEvent, BookEventSchema } from './schemas/book-event.schema';
 import { BookEventController } from './controllers/book-event.controller';
 import { BookEventService } from './services/book-event.service';
+import { UploadController } from './controllers/upload.controller';
+import { ImportFromFileService } from './services/import-from-file.service';
 
 @Module({
     imports: [
@@ -36,6 +38,7 @@ import { BookEventService } from './services/book-event.service';
       UserService,
       BookService,
       BookEventService,
+      ImportFromFileService,
       {
         provide: APP_FILTER,
         useClass: ServerExceptionFilter,
@@ -45,6 +48,6 @@ import { BookEventService } from './services/book-event.service';
         useClass: ServerResponseInterceptor
       }
     ],
-    controllers: [UserController, BookController, BookEventController]
+    controllers: [UserController, BookController, BookEventController, UploadController]
 })
 export class LibraryModule {}

@@ -39,7 +39,11 @@
             <p-button (onClick)="resetFilters()" icon="pi pi-delete-left" severity="danger" label="Szűrők törlése"></p-button>
             <p-button type="button" icon="pi pi-search" (onClick)="filter()" label="Szűrés"></p-button>
         </div>
-    </section>    
+    </section>
+
+    <div>
+        <app-upload (onFileUploaded)="filter()"></app-upload>
+    </div>
 
     <section class="list-section">
         <div class="button-container table-button-row">
