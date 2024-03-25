@@ -1,8 +1,13 @@
-<div>
-    <p-fileUpload mode="basic" chooseLabel="Fájl" accept=".xls" [customUpload]="true" (uploadHandler)="handleUpload($event)"></p-fileUpload>
+<div class="main-container">
+
+    <div class="header-row">
+        <h2 class="heading">Könyvek betöltése fájlból</h2>
+    </div>
+
+    <p-fileUpload mode="advanced" chooseLabel="Fájl" uploadLabel="Feltöltés" cancelLabel="Mégse" accept=".xls" [customUpload]="true" (uploadHandler)="handleUpload($event)"></p-fileUpload>
 
     <section class="list-section" *ngIf="failedImports.length > 0">
-        <h3>Sikertelen importálások</h3>
+        <h2>Sikertelen betöltések</h2>
         <p-table [value]="failedImports" responsiveLayout="stack" [breakpoint]="'1000px'">
             <ng-template pTemplate="header">
                 <tr>

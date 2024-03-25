@@ -4,6 +4,7 @@ import { UserListComponent } from './user/components/user-list/user-list.compone
 import { BookListComponent } from './book/components/book-list/book-list.component';
 import { ProfileComponent } from './user/components/profile/profile.component';
 import { BookWithEventListComponent } from './book/components/book-with-event-list/book-with-event-list.component';
+import { UploadComponent } from './book/components/upload/upload.component';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,10 @@ export const routes: Routes = [
     {
         path: 'available-books',
         component: BookWithEventListComponent
+    },
+    {
+        path: 'book-import',
+        component: UploadComponent
     },
     {
         path: 'profile',
