@@ -13,3 +13,18 @@ export class BasicBookEventDto {
     userId: string = undefined;
 
 }
+
+
+export class AdminBookWithEventDto extends BookDto {
+
+    events: AdminBookEventDto[] = [];
+
+}
+
+export class AdminBookEventDto {
+
+    eventType: BookEventType = undefined;
+    userId: string = undefined;
+    fullName: string = undefined;
+
+}

@@ -2,19 +2,24 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { isString } from "class-validator";
 import mongoose, { FilterQuery, Model } from "mongoose";
-import { mapAllToClass } from "src/utils/mappers";
+import { mapAllToClass, mapToClass } from "src/utils/mappers";
 import { validateObjectId } from "src/utils/object-utils";
+import { AdminBookWithEventFiltersDto } from "../models/book-event/admin-book-with-event-filters.dto";
 import { BookWithEventFiltersDto } from "../models/book-event/book-with-event-filters.dto";
-import { BookWithEventDto } from "../models/book-event/book-with-event.dto";
+import { AdminBookEventDto, AdminBookWithEventDto, BasicBookEventDto, BookWithEventDto } from "../models/book-event/book-with-event.dto";
 import { BookDto } from "../models/book/book.dto";
-import { FilterBookDto } from "../models/book/filter-book.dto";
-import { Book } from "../schemas/book.schema";
 import { CreateBookDto } from "../models/book/create-book.dto";
+import { FilterBookDto } from "../models/book/filter-book.dto";
+import { BookEvent } from "../schemas/book-event.schema";
+import { Book } from "../schemas/book.schema";
+import { User } from "../schemas/user.schema";
 
 @Injectable()
 export class BookService {
 
-    constructor(@InjectModel(Book.name) private bookModel: Model<Book>) {}
+    constructor(@InjectModel(Book.name) private bookModel: Model<Book>,
+                @InjectModel(BookEvent.name) private bookEventModel: Model<BookEvent>,
+                @InjectModel(User.name) private userModel: Model<User>) {}
 
     async createOrUpdateBook(book: BookDto | CreateBookDto): Promise<void> {
         if (book instanceof CreateBookDto) {
@@ -98,6 +103,88 @@ export class BookService {
           ]).exec();
 
         return mapAllToClass(BookWithEventDto, result);
+    }
+
+    async findBooksWithEventsForAdmin(filters: AdminBookWithEventFiltersDto): Promise<AdminBookWithEventDto[]> {
+        const bookIds = await this.findBookIdsForAdminQuery(filters.userId);
+        const booksWithEvents = await this.findBooksForAdminQuery(filters, bookIds);
+        const adminBooksWithEvents = [];
+        for (let bookWithEvent of booksWithEvents) {
+            const adminBookWithEvent = await this.basicToAdminDto(bookWithEvent);
+            adminBooksWithEvents.push(adminBookWithEvent);
+        }
+
+        return adminBooksWithEvents;
+    }
+
+    private async findBookIdsForAdminQuery(userIdStr?: string): Promise<mongoose.Types.ObjectId[]> {
+        const filterQuery = {} as FilterQuery<BookEvent>;
+        if (userIdStr) {
+            const userId = new mongoose.Types.ObjectId(userIdStr);
+            filterQuery.userId = userId;
+        }
+
+        const resultDocs = await this.bookEventModel.find(filterQuery).exec();
+        const resultObjects = resultDocs.map(doc => doc.toObject());
+        return resultObjects.map(bookEvent => bookEvent.bookId);
+    }
+
+    private async findBooksForAdminQuery(filters: AdminBookWithEventFiltersDto, bookIds: mongoose.Types.ObjectId[]): Promise<BookWithEventDto[]> {
+        const bookMatchQuery = {} as Record<string, any>;
+
+        const { userId, ...bookFilters } = filters;
+        if (bookFilters && Object.keys(bookFilters).length > 0) {
+            Object.keys(bookFilters).forEach(key => {
+                if (bookFilters[key] !== null && bookFilters[key] !== undefined) {
+                    bookMatchQuery[key] = isString(bookFilters[key])
+                        ? { $regex: new RegExp(bookFilters[key], 'i') }
+                        : bookFilters[key];
+                }
+            });
+        }
+
+        bookMatchQuery['_id'] = { $in: bookIds };
+
+        const result = await this.bookModel.aggregate([
+            {
+                $match: bookMatchQuery
+            },
+            {
+              $lookup: {
+                from: 'bookevents',
+                localField: '_id',
+                foreignField: 'bookId',
+                as: 'events'
+              }
+            }
+          ]).exec();
+
+        return mapAllToClass(BookWithEventDto, result);
+    }
+
+    private async basicToAdminDto(basic: BookWithEventDto): Promise<AdminBookWithEventDto> {
+        const adminEvents = [];
+        for (let event of basic.events) {
+            const adminEvent = await this.basicToAdminBookEventDto(event);
+            adminEvents.push(adminEvent);
+        }
+
+        const adminDto = {
+            ...basic,
+            events: adminEvents
+        };
+
+        return mapToClass(AdminBookWithEventDto, adminDto);
+    }
+
+    private async basicToAdminBookEventDto(basicDto: BasicBookEventDto): Promise<AdminBookEventDto> {
+        const userDoc = await this.userModel.findById(new mongoose.Types.ObjectId(basicDto.userId));
+        const adminBookEventDto = {
+            ...basicDto,
+            fullName: userDoc.fullName
+        };
+
+        return mapToClass(AdminBookEventDto, adminBookEventDto);
     }
 
 

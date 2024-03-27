@@ -6,10 +6,11 @@ import { customValidationPipe } from "../exception-filters/custom-exception-fact
 import { BookDto } from "../models/book/book.dto";
 import { FilterBookDto } from "../models/book/filter-book.dto";
 import { BookService } from "../services/book.service";
-import { BookWithEventDto } from "../models/book-event/book-with-event.dto";
+import { AdminBookWithEventDto, BookWithEventDto } from "../models/book-event/book-with-event.dto";
 import { BookWithEventFiltersDto } from "../models/book-event/book-with-event-filters.dto";
 import { Request } from "express";
 import { UserDto } from "../models/user/user.dto";
+import { AdminBookWithEventFiltersDto } from "../models/book-event/admin-book-with-event-filters.dto";
 
 @Controller('book')
 export class BookController {
@@ -44,6 +45,10 @@ export class BookController {
         return await this.bookService.findBooksWithEvents(tokenUserData._id, filters);
     }
 
-
+    @Post('find-with-event-and-user')
+    @UseGuards(AdminJwtGuard)
+    async findBooksWithAdminEvent(@Body() filters: AdminBookWithEventFiltersDto): Promise<AdminBookWithEventDto[]> {
+        return await this.bookService.findBooksWithEventsForAdmin(filters);
+    }
 
 }
