@@ -1,0 +1,59 @@
+<div class="main-container">
+
+    <div class="header-row">
+        <h2 class="heading">Kikölcsönzött könyvek</h2>
+    </div>
+
+    <section class="filter-container">
+        <form [formGroup]="filterForm" (keydown.enter)="filter()">
+            <span class="p-float-label">
+                <input pInputText id="search-author" formControlName="author" autocomplete="off" type="search"/>
+                <label for="search-author">Író/szerkesztő</label>
+            </span>
+            <span class="p-float-label">
+                <input pInputText id="search-title" formControlName="title" autocomplete="off" type="search"/>
+                <label for="search-title">Cím</label>
+            </span>
+        </form>
+        <div class="button-container">
+            <p-button (onClick)="resetFilters()" icon="pi pi-delete-left" severity="danger" label="Szűrők törlése"></p-button>
+            <p-button type="button" icon="pi pi-search" (onClick)="filter()" label="Szűrés"></p-button>
+        </div>
+    </section>    
+
+    <section class="list-section">
+        <p-table [value]="bookWithEventsAndUsers" responsiveLayout="stack" [breakpoint]="'1000px'">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Író/szerkesztő</th>
+                    <th>Cím</th>
+                    <th>Akinél kint van</th>
+                    <th>Kölcsönzés napja</th>
+                    <th>Határidő</th>
+                    <th>Aki lefoglalta</th>
+                    <th>Műveletek</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-book>
+                <tr>
+                    <td><span class="p-column-title">Író/szerkesztő:</span>{{ book.author }}</td>
+                    <td><span class="p-column-title">Cím:</span>{{ book.title }}</td>
+                    <td><span class="p-column-title">Akinél kint van:</span>{{ book.borrowUserFullName }}</td>
+                    <td><span class="p-column-title">Kölcsönzés napja:</span>{{ book.borrowedAt | date: dateFormat }}</td>
+                    <td [class.error-color]="isOverDueDate(book)">
+                        <span class="p-column-title">Határidő</span>
+                        <span>
+                            {{ book.dueDate | date: dateFormat }}
+                            <i *ngIf="book.userNotified" class="pi pi-send success-color" pTooltip="E-mail értesítés elküldve"></i>
+                        </span>
+                    </td>
+                    <td><span class="p-column-title">Aki lefoglalta:</span>{{ book.reserveUserFullName }}</td>
+                    <td>
+                        <span class="p-column-title">Műveletek:</span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>        
+    </section>
+
+</div>

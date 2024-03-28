@@ -45,7 +45,7 @@ export class BookWithEventListComponent {
         isbn: [null],
         publisher: [null],
         genre: [null],
-        subjectArea: [null],  
+        subjectArea: [null],
       }),
       myEvents: [null]
     });

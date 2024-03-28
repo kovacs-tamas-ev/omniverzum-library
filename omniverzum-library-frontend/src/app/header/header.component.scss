@@ -21,17 +21,21 @@
 
 #link-row {
     display: flex;
+    overflow-x: auto; // új
     border-top: 1px solid color-mix(in srgb, var(--primary-color-text) 50%, transparent);
     background-color: var(--primary-color);
     padding-left: 1rem;
     .link-with-icon {
         margin-right: 1.2rem;
+        display: flex; //új
+        align-items: center; //új
         color: var(--primary-color-text);
         font-weight: bold;
         padding: 4px;
         border-radius: 8px;
 
         a {
+            white-space: nowrap;
             margin-left: .25rem;
             color: var(--primary-color-text);
             font-size: .9rem;

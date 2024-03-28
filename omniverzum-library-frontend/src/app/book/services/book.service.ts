@@ -2,8 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BookDto } from "../../models/book/book.dto";
 import { firstValueFrom } from "rxjs";
-import { BookWithEventDto } from "../../models/book-event/book-with-event.dto";
+import { AdminBookWithEventDto, BookWithEventDto } from "../../models/book-event/book-with-event.dto";
 import { BookWithEventFiltersDto } from "../../models/book-event/book-with-event-filters.dto";
+import { AdminBookWithEventFiltersDto } from "../../models/book-event/admin-book-with-event-filters.dto";
 
 @Injectable({
     providedIn: 'root'
@@ -27,5 +28,11 @@ export class BookService {
     async findBooksWithEvents(filters?: BookWithEventFiltersDto): Promise<BookWithEventDto[]> {
         return firstValueFrom(this.http.post<BookWithEventDto[]>('/api/book/find-with-event', filters));
     }
+
+    async findBooksWithEventAndUser(filters: AdminBookWithEventFiltersDto): Promise<AdminBookWithEventDto[]> {
+        return firstValueFrom(this.http.post<AdminBookWithEventDto[]>('api/book/find-with-event-and-user', filters));
+    }
+
+
 
 }

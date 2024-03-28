@@ -16,6 +16,7 @@ import { DateFilterComponent } from '../../../shared/date-filter/date-filter.com
 import { ErrorDisplayerComponent } from '../../../shared/error-displayer/error-displayer.component';
 import { markControlsAsTouchedAndDirty } from '../../../utils/form-utils';
 import { UserService } from '../../services/user.service';
+import { dateFormat } from '../../../utils/constants';
 
 
 @Component({
@@ -26,6 +27,8 @@ import { UserService } from '../../services/user.service';
   styleUrl: './user-list.component.scss'
 })
 export class UserListComponent {
+
+  dateFormat = dateFormat;
 
   filterForm!: FormGroup;
 

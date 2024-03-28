@@ -56,7 +56,7 @@
                     <td><span class="p-column-title">Felhasználónév:</span>{{ user.username }}</td>
                     <td><span class="p-column-title">E-mail:</span>{{ user.email }}</td>
                     <td><span class="p-column-title">Képzés:</span>{{ user.course }}</td>
-                    <td><span class="p-column-title">Csatlakozás dátuma:</span>{{ user.membershipStart | date: 'yyyy.MM.dd' }}</td>
+                    <td><span class="p-column-title">Csatlakozás dátuma:</span>{{ user.membershipStart | date: dateFormat }}</td>
                     <td>
                         <span class="p-column-title">Admin:</span>
                         <i class="pi pi-check success-color" *ngIf="user.admin"></i>

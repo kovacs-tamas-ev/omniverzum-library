@@ -26,5 +26,8 @@ export class AdminBookEventDto {
     eventType: BookEventType = undefined;
     userId: string = undefined;
     fullName: string = undefined;
+    createdAt: Date = undefined;
+    dueDate: Date = undefined;
+    userNotified: boolean = undefined;
 
 }

@@ -13,3 +13,20 @@ export interface BasicBookEventDto {
     userId: string;
 
 }
+
+export interface AdminBookWithEventDto extends BookDto {
+
+    events: AdminBookEventDto[];
+
+}
+
+export interface AdminBookEventDto {
+
+    eventType: BookEventType;
+    userId: string;
+    fullName: string;
+    createdAt: Date;
+    dueDate: Date;
+    userNotified: boolean;
+
+}

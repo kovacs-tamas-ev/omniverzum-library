@@ -29,16 +29,21 @@
                 <a routerLink="/admin/book-list" routerLinkActive="active-link">Könyvek</a>
             </span>
             <span class="link-with-icon">
+                <i class="pi pi-cart-plus"></i>
+                <a routerLink="/admin/borrowed-books" routerLinkActive="active-link">Kölcsönzések</a>
+            </span>
+            <span class="link-with-icon">
                 <i class="pi pi-upload"></i>
                 <a routerLink="/admin/book-import" routerLinkActive="active-link">Import fájl</a>
             </span>
-            <span class="link-with-icon link-separator"></span>
         </ng-container>
         <!-- Reader pages -->
-        <span class="link-with-icon">
-            <i class="pi pi-book"></i>
-            <a routerLink="/available-books" routerLinkActive="active-link">Kölcsönzés</a>
-        </span>
+        <ng-container *ngIf="!authService.getUserData()?.admin">
+            <span class="link-with-icon">
+                <i class="pi pi-book"></i>
+                <a routerLink="/available-books" routerLinkActive="active-link">Kölcsönzés</a>
+            </span>
+        </ng-container>
     </div>
     
 </div>

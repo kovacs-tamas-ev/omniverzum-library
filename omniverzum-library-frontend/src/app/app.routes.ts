@@ -6,6 +6,7 @@ import { ProfileComponent } from './user/components/profile/profile.component';
 import { BookWithEventListComponent } from './book/components/book-with-event-list/book-with-event-list.component';
 import { UploadComponent } from './book/components/upload/upload.component';
 import { adminGuard } from './auth/guards/admin.guard';
+import { AdminBookWithEventListComponent } from './book/components/admin-book-with-event-list/admin-book-with-event-list.component';
 
 export const routes: Routes = [
     {
@@ -32,6 +33,10 @@ export const routes: Routes = [
             {
                 path: 'book-list',
                 component: BookListComponent
+            },
+            {
+                path: 'borrowed-books',
+                component: AdminBookWithEventListComponent
             },
             {
                 path: 'book-import',
