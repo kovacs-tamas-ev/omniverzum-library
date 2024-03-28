@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { isBefore } from 'date-fns';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
 import { TableModule } from 'primeng/table';
 import { BookEventType } from '../../../models/book-event/book-event-type';
 import { AdminBookWithEventDto } from '../../../models/book-event/book-with-event.dto';
@@ -13,11 +14,14 @@ import { dateFormat } from '../../../utils/constants';
 import { BookEventService } from '../../services/book-event.service';
 import { BookService } from '../../services/book.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { UserDto } from '../../../models/user/user.dto';
+import { UserService } from '../../../user/services/user.service';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-admin-book-with-event-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, TableModule, TooltipModule],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, AutoCompleteModule, ButtonModule, TableModule, TooltipModule],
   templateUrl: './admin-book-with-event-list.component.html',
   styleUrl: './admin-book-with-event-list.component.scss'
 })
@@ -27,11 +31,19 @@ export class AdminBookWithEventListComponent {
   bookWithEventsAndUsers: DisplayAdminBookWithEventDto[] = [];
   dateFormat = dateFormat;
 
+  allUserSuggestions: UserDto[] = [];
+  filteredUserSuggestions: UserDto[] = [];
+
+  @ViewChild('userAutoComplete') userAutoComplete!: AutoComplete;
+
   constructor(private fb: FormBuilder,
               private bookService: BookService,
+              private userService: UserService,
+              private authService: AuthService,
               private bookEventService: BookEventService,
               private messageService: MessageService) {
     this.initForm();
+    this.initUserSuggestions();
     this.filter();
   }
 
@@ -41,6 +53,13 @@ export class AdminBookWithEventListComponent {
       author: [null],
       userId: [null],
     });
+  }
+
+  private async initUserSuggestions(): Promise<void> {
+    const allUsers = await this.userService.findUsers();
+    const loggedInUser = this.authService.getUserData();
+    this.allUserSuggestions = allUsers.filter(user => user._id !== loggedInUser?._id);
+    this.filteredUserSuggestions = [ ...this.allUserSuggestions ];
   }
 
   async filter(): Promise<void> {
@@ -68,6 +87,7 @@ export class AdminBookWithEventListComponent {
 
   resetFilters(): void {
     this.filterForm.reset();
+    this.userAutoComplete.clear();
     this.filter();
   }
 
@@ -84,5 +104,21 @@ export class AdminBookWithEventListComponent {
     return isBefore(row.dueDate, startOfToday);
   }
 
+  filterUsers(event: any): void {
+    const query = event.query as string;
+    this.filteredUserSuggestions = this.allUserSuggestions.filter(user => user.fullName.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+  }
+
+  handleUserSelected(event: any): void {
+    const selectedUser = event.value;
+    this.filterForm.patchValue({ userId: selectedUser._id });
+  }
+
+  handleOnBlur(): void {
+    const inputValue = this.userAutoComplete.inputValue();
+    if (inputValue === null || inputValue === undefined || inputValue === '') {
+      this.filterForm.patchValue({ userId: undefined });
+    }
+  }
 
 }

@@ -1,0 +1,19 @@
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    .p-float-label, p-triStateCheckbox {
+        margin-right: 1rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+
+p-triStateCheckbox, p-checkbox {
+    width: 17.375rem;
+}

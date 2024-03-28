@@ -1,11 +1,11 @@
 <div class="main-container">
 
     <div class="header-row">
-        <h2 class="heading">Kikölcsönzött könyvek</h2>
+        <h2 class="heading">Kölcsönzött könyvek</h2>
     </div>
 
     <section class="filter-container">
-        <form [formGroup]="filterForm" (keydown.enter)="filter()">
+        <form [formGroup]="filterForm" class="filter-form" (keydown.enter)="filter()">
             <span class="p-float-label">
                 <input pInputText id="search-author" formControlName="author" autocomplete="off" type="search"/>
                 <label for="search-author">Író/szerkesztő</label>
@@ -13,6 +13,19 @@
             <span class="p-float-label">
                 <input pInputText id="search-title" formControlName="title" autocomplete="off" type="search"/>
                 <label for="search-title">Cím</label>
+            </span>
+            <span class="p-float-label">
+                <p-autoComplete #userAutoComplete
+                                inputId="userId"
+                                [suggestions]="filteredUserSuggestions"
+                                (completeMethod)="filterUsers($event)"
+                                optionLabel="fullName"
+                                emptyMessage="Nincs a keresésnek megfelelő találat"
+                                (onSelect)="handleUserSelected($event)"
+                                (onBlur)="handleOnBlur()"
+                                [showClear]="true"
+                                [forceSelection]="true"></p-autoComplete>
+                <label for="userId">Könyvtári tag</label>
             </span>
         </form>
         <div class="button-container">
@@ -42,7 +55,7 @@
                     <td><span class="p-column-title">Kölcsönzés napja:</span>{{ book.borrowedAt | date: dateFormat }}</td>
                     <td [class.error-color]="isOverDueDate(book)">
                         <span class="p-column-title">Határidő</span>
-                        <span>
+                        <span class="whitespace-nowrap">
                             {{ book.dueDate | date: dateFormat }}
                             <i *ngIf="book.userNotified" class="pi pi-send success-color" pTooltip="E-mail értesítés elküldve"></i>
                         </span>

@@ -5,7 +5,7 @@ export class FilterUserDto {
     fullName?: string = undefined;
     email?: string = undefined;
     course?: string = undefined;
-    membershipStart: DateFilterDto = undefined;
+    membershipStart?: DateFilterDto = undefined;
     admin?: boolean = undefined;
 
 }
