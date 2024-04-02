@@ -59,7 +59,14 @@
             </p-tabPanel>
 
             <p-tabPanel header="Fiók törlése">
-                <p-button type="button" label="Fiók törlése" icon="pi pi-trash" styleClass="p-button-danger" (onClick)="confirmDeleteProfile()"></p-button>
+                <form [formGroup]="deleteProfileForm" (ngSubmit)="confirmDeleteProfile()">
+                    <span class="p-float-label">
+                        <p-password id="delete-profile-password" formControlName="password" [feedback]="false" autocomplete="off" type="search"></p-password>
+                        <app-error-displayer [control]="deleteProfileForm.get('password')"></app-error-displayer>
+                        <label for="delete-profile-password" class="required">Jelszó</label>
+                    </span>                
+                    <p-button type="submit" label="Fiók törlése" icon="pi pi-trash" styleClass="p-button-danger" [disabled]="!deleteProfileForm.valid" (onClick)="confirmDeleteProfile()"></p-button>
+                </form>
             </p-tabPanel>
 
         </p-tabView>

@@ -145,11 +145,16 @@ export class UserService {
         await this.userModel.updateOne({ _id: userId }, { $set: { password: hashedPassword } });
     }
 
-    async deleteOwnProfile(userId: string): Promise<void> {
+    async deleteOwnProfile(userId: string, password: string): Promise<void> {
         validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
         const existingUser = await this.userModel.findOne({ _id: userId });
         if (!existingUser) {
             throw new ServerException({ message: 'A felhasználó nem található' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+        if (!isPasswordValid) {
+            throw new ServerException({ message: 'A megadott jelszó hibás' });
         }
 
         if (existingUser.admin) {

@@ -27,6 +27,7 @@ export class ProfileComponent {
   userData: UserDto;
   basicDataForm!: FormGroup;
   passwordForm!: FormGroup;
+  deleteProfileForm!: FormGroup;
 
   constructor(private authService: AuthService,
               private fb: FormBuilder,
@@ -55,6 +56,9 @@ export class ProfileComponent {
                       ],
       rePassword: [null, [Validators.required, connectControlsValidation('password', 'EQUAL', 'Az új jelszó és a megismétlése nem egyező')]]
     });
+    this.deleteProfileForm = this.fb.group({
+      password: [null, Validators.required]
+    });
   }
 
   async changeBasicData(): Promise<void> {
@@ -74,6 +78,10 @@ export class ProfileComponent {
   }
 
   confirmDeleteProfile(): void {
+    if (!this.deleteProfileForm.valid) {
+      markControlsAsTouchedAndDirty(this.deleteProfileForm);
+      return;
+    }
     this.confirmationService.confirm({
       header: 'Törlés megerősítése',
       message: 'Biztosan szeretné törölni a felhasználói fiókját? A törlés végleges és nem visszaállítható.',
@@ -87,7 +95,7 @@ export class ProfileComponent {
   }
 
   async deleteProfile(): Promise<void> {
-    await this.userService.deleteOwnProfile();
+    await this.userService.deleteOwnProfile(this.deleteProfileForm.value.password as string);
     this.messageService.add({ detail: 'A felhasználói fiókját sikeresen töröltük', severity: 'success', sticky: true });
     this.authService.logout();
     this.router.navigate(['/login']);

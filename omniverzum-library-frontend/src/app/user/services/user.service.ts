@@ -43,8 +43,8 @@ export class UserService {
         await firstValueFrom(this.http.post('/api/user/change-password', changePasswordDto));
     }
 
-    async deleteOwnProfile(): Promise<void> {
-        await firstValueFrom(this.http.delete('/api/user/delete-own-profile'));
+    async deleteOwnProfile(password: string): Promise<void> {
+        await firstValueFrom(this.http.post('/api/user/delete-own-profile', { password }));
     }
 
 

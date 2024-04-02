@@ -77,11 +77,11 @@ export class UserController {
         await this.userService.changePassword(tokenUserData._id, changePasswordDto);
     }
 
-    @Delete('delete-own-profile')
+    @Post('delete-own-profile')
     @UseGuards(BasicJwtGuard)
-    async deleteOwnProfile(@Req() request: Request): Promise<void> {
+    async deleteOwnProfile(@Req() request: Request, @Body() passwordDto: { password: string }): Promise<void> {
         const tokenUserData = request.user as UserDto;
-        await this.userService.deleteOwnProfile(tokenUserData._id);
+        await this.userService.deleteOwnProfile(tokenUserData._id, passwordDto.password);
     }
 
 
