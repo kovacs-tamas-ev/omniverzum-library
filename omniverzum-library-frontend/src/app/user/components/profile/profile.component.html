@@ -39,6 +39,11 @@
             <p-tabPanel header="Jelszó">
                 <form class="error-display" [formGroup]="passwordForm" (ngSubmit)="changePassword()">
                     <span class="p-float-label">
+                        <p-password id="oldPassword" formControlName="oldPassword" [feedback]="false" autocomplete="off" type="search"></p-password>
+                        <app-error-displayer [control]="passwordForm.get('oldPassword')"></app-error-displayer>
+                        <label for="oldPassword" class="required">Régi jelszó</label>
+                    </span>
+                    <span class="p-float-label">
                         <p-password id="password" formControlName="password" [feedback]="false" autocomplete="off" type="search"></p-password>
                         <app-error-displayer [control]="passwordForm.get('password')"></app-error-displayer>
                         <label for="password" class="required">Új jelszó</label>

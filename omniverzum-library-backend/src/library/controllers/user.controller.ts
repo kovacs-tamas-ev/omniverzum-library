@@ -74,7 +74,7 @@ export class UserController {
         }
 
         const tokenUserData = request.user as UserDto;
-        await this.userService.changePassword(tokenUserData._id, changePasswordDto.password);
+        await this.userService.changePassword(tokenUserData._id, changePasswordDto);
     }
 
     @Delete('delete-own-profile')

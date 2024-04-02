@@ -1,4 +1,5 @@
 import { AbstractControl, FormGroup, ValidationErrors } from "@angular/forms";
+import { filter } from "rxjs";
 
 export function markControlsAsTouchedAndDirty(form: FormGroup): void {
     Object.keys(form.controls).forEach(key => {
@@ -13,17 +14,27 @@ export function markControlsAsTouchedAndDirty(form: FormGroup): void {
     })
 }
 
-export function connectControlsValidation(connectControlName: string): (control: AbstractControl) => ValidationErrors | null {
+export function connectControlsValidation(connectControlName: string, connectionType: 'EQUAL' | 'NOT_EQUAL', message: string): (control: AbstractControl) => ValidationErrors | null {
     let statusChangeSubscription: any = null;
     return (control: AbstractControl) => {
         const connectControl = control.parent?.get(connectControlName);
         if (connectControl === null || connectControl === undefined) {
             return null;
         }
+        
         if (!statusChangeSubscription) {
-            statusChangeSubscription = connectControl.statusChanges.subscribe(() => control.updateValueAndValidity({ emitEvent: false }));
+            let oldStatus = null as string | null;
+            statusChangeSubscription = connectControl.statusChanges.pipe(
+                filter(newStatus => newStatus !== oldStatus),
+            ).subscribe((newStatus) => {
+                oldStatus = newStatus;
+                return control.updateValueAndValidity();
+            });
         }
         
-        return control.value === connectControl.value ? null : { connectControls: true };
+        if (connectionType === 'EQUAL') {
+            return control.value === connectControl.value ? null : { connectControls: message };    
+        }
+        return control.value !== connectControl.value ? null : { connectControls: message };
     };
 }

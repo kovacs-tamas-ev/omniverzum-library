@@ -49,7 +49,13 @@ export class ErrorDisplayerComponent implements OnInit {
       case 'required':
         return 'A mező kitöltése kötelező';
       case 'connectControls':
-        return 'A két mező értéke nem egyezik meg'
+        const errorMessage = this.control?.errors!['connectControls'];
+        if (!errorMessage) {
+          return 'A két mező értéke meg kell hogy egyezzen';
+        }
+        
+        return errorMessage;
+
     }
 
     return 'A mező értéke hibás';

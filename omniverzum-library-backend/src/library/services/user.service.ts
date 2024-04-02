@@ -12,6 +12,7 @@ import { ModifyOwnDataDto } from "../models/user/modify-own-data.dto";
 import { ModifyUserDataDto } from "../models/user/modify-user-data.dto";
 import { UserDto } from "../models/user/user.dto";
 import { User } from "../schemas/user.schema";
+import { ChangePasswordDto } from "../models/user/change-password.dto";
 
 @Injectable()
 export class UserService {
@@ -129,14 +130,18 @@ export class UserService {
         await this.userModel.findByIdAndDelete(userId);
     }
     
-    async changePassword(userId: string, newPassword: string): Promise<void> {
+    async changePassword(userId: string, changePasswordDto: ChangePasswordDto): Promise<void> {
         validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
         const existingUser = await this.userModel.findOne({ _id: userId });
         if (!existingUser) {
             throw new ServerException({ message: 'A felhasználó nem található' });
         }
+        const isOldPasswordValid = await bcrypt.compare(changePasswordDto.oldPassword, existingUser.password);
+        if (!isOldPasswordValid) {
+            throw new ServerException({ message: 'A megadott régi jelszó hibás' });
+        }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const hashedPassword = await bcrypt.hash(changePasswordDto.password, 10);
         await this.userModel.updateOne({ _id: userId }, { $set: { password: hashedPassword } });
     }
 

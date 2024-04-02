@@ -47,8 +47,13 @@ export class ProfileComponent {
       membershipStart: [{ value: this.userData.membershipStart, disabled: true }]
     });
     this.passwordForm = this.fb.group({
-      password: [null, [Validators.required, connectControlsValidation('rePassword')]],
-      rePassword: [null, [Validators.required, connectControlsValidation('password')]]
+      oldPassword: [null, [Validators.required, connectControlsValidation('password', 'NOT_EQUAL', 'A régi és az új jelszó nem egyezhet meg')]],
+      password: [null, [
+                          Validators.required,
+                          connectControlsValidation('rePassword', 'EQUAL', 'Az új jelszó és a megismétlése nem egyező'),
+                          connectControlsValidation('oldPassword', 'NOT_EQUAL', 'A régi és az új jelszó nem egyezhet meg')]
+                      ],
+      rePassword: [null, [Validators.required, connectControlsValidation('password', 'EQUAL', 'Az új jelszó és a megismétlése nem egyező')]]
     });
   }
 
