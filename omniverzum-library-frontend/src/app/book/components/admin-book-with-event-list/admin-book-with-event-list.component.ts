@@ -104,6 +104,7 @@ export class AdminBookWithEventListComponent {
     startOfToday.setHours(0);
     startOfToday.setMinutes(0);
     startOfToday.setSeconds(0);
+    startOfToday.setMilliseconds(0);
 
     return isBefore(row.dueDate, startOfToday);
   }

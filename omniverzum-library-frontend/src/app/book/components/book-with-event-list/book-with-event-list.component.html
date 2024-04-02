@@ -55,6 +55,8 @@
                     <th>Tárgykör</th>
                     <th>Kiadó</th>
                     <th>ISBN</th>
+                    <th>Kölcsönzés napja</th>
+                    <th>Kölcsönzés határideje</th>
                     <th>Műveletek</th>
                 </tr>
             </ng-template>
@@ -70,6 +72,8 @@
                     <td><span class="p-column-title">Tárgykör:</span>{{ book.subjectArea }}</td>
                     <td><span class="p-column-title">Kiadó:</span>{{ book.publisher }}</td>
                     <td><span class="p-column-title">ISBN:</span>{{ book.isbn }}</td>
+                    <td><span class="p-column-title">Kölcsönzés napja:</span>{{ book.state.borrowedAt | date: dateFormat }}</td>
+                    <td [class.error-color]="book.state.isOverdue"><span class="p-column-title">Kölcsönzés határideje:</span>{{ book.state.dueDate | date: dateFormat }}</td>
                     <td>
                         <span class="p-column-title">Műveletek:</span>
                         <i class="pi pi-book icon-button borrow-icon" *ngIf="!book.state.myBorrowed && !book.state.othersBorrowed && !book.state.othersReserved" pTooltip="Kikölcsönzöm" (click)="borrow(book)"></i>

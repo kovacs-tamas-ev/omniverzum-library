@@ -11,6 +11,8 @@ export interface BasicBookEventDto {
 
     eventType: BookEventType;
     userId: string;
+    createdAt: Date;
+    dueDate: Date;
 
 }
 

@@ -11,4 +11,7 @@ export interface DisplayBookStateDto {
     myReserved: boolean;
     othersBorrowed: boolean;
     othersReserved: boolean;
+    borrowedAt?: Date;
+    dueDate?: Date;
+    isOverdue: boolean;
 }

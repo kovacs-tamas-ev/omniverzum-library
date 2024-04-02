@@ -7,13 +7,15 @@ import { TableModule } from 'primeng/table';
 import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
 import { BookService } from '../../services/book.service';
 import { DisplayBookWithEventDto } from '../../../models/book-event/display-book-with-event.dto';
-import { BookWithEventDto } from '../../../models/book-event/book-with-event.dto';
+import { BasicBookEventDto, BookWithEventDto } from '../../../models/book-event/book-with-event.dto';
 import { AuthService } from '../../../auth/services/auth.service';
 import { BookEventType } from '../../../models/book-event/book-event-type';
 import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { BookEventService } from '../../services/book-event.service';
 import { MessageService } from 'primeng/api';
+import { isBefore } from 'date-fns';
+import { dateFormat } from '../../../utils/constants';
 
 @Component({
   selector: 'app-book-with-event-list',
@@ -26,6 +28,7 @@ export class BookWithEventListComponent {
 
   filterForm!: FormGroup;
   bookWithEventsList: DisplayBookWithEventDto[] = [];
+  dateFormat = dateFormat;
 
   constructor(private fb: FormBuilder,
               private bookService: BookService,
@@ -66,8 +69,24 @@ export class BookWithEventListComponent {
         myReserved: events.some(event => event.eventType === BookEventType.RESERVE && event.userId === tokenUserId),
         othersBorrowed: events.some(event => event.eventType === BookEventType.BORROW && event.userId !== tokenUserId),
         othersReserved: events.some(event => event.eventType === BookEventType.RESERVE && event.userId !== tokenUserId),
+        borrowedAt: events.find(event => event.eventType === BookEventType.BORROW)?.createdAt,
+        dueDate: events.find(event => event.eventType === BookEventType.BORROW)?.dueDate,
+        isOverdue: this.isOverdue(events.find(event => event.eventType === BookEventType.BORROW))
       }
     };
+  }
+
+  private isOverdue(borrowEvent?: BasicBookEventDto): boolean {
+    if (!borrowEvent) {
+      return false;
+    }
+    const startOfToday = new Date();
+    startOfToday.setHours(0);
+    startOfToday.setMinutes(0);
+    startOfToday.setSeconds(0);
+    startOfToday.setMilliseconds(0);
+
+    return isBefore(borrowEvent.dueDate, startOfToday);
   }
 
   resetFilters(): void {

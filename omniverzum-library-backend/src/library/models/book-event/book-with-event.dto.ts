@@ -11,6 +11,8 @@ export class BasicBookEventDto {
 
     eventType: BookEventType = undefined;
     userId: string = undefined;
+    createdAt: Date = undefined;
+    dueDate: Date = undefined;
 
 }
 
