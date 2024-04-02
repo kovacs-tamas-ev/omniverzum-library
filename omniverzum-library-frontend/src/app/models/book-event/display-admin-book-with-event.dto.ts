@@ -1,5 +1,6 @@
 export interface DisplayAdminBookWithEventDto {
 
+    bookId: string;
     title: string;
     author: string;
     isBorrowed: boolean;

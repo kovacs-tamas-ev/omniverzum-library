@@ -64,6 +64,8 @@
                     <td><span class="p-column-title">Aki lefoglalta:</span>{{ book.reserveUserFullName }}</td>
                     <td>
                         <span class="p-column-title">Műveletek:</span>
+                        <i class="pi pi-replay icon-button return-icon" *ngIf="book.isBorrowed" pTooltip="Visszavesz" (click)="confirmReturnBook(book)"></i>
+                        <i class="pi pi-delete-left icon-button cancel-reservation-icon" *ngIf="book.isReserved" pTooltip="Foglalás törlése" (click)="confirmCancelReservation(book)"></i>
                     </td>
                 </tr>
             </ng-template>

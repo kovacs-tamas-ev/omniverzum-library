@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { isBefore } from 'date-fns';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { AutoComplete, AutoCompleteModule } from 'primeng/autocomplete';
@@ -41,6 +41,7 @@ export class AdminBookWithEventListComponent {
               private bookService: BookService,
               private userService: UserService,
               private authService: AuthService,
+              private confirmationService: ConfirmationService,
               private bookEventService: BookEventService,
               private messageService: MessageService) {
     this.initForm();
@@ -73,6 +74,7 @@ export class AdminBookWithEventListComponent {
     const borrowEvent = adminBookWithEventDto.events.find(event => event.eventType === BookEventType.BORROW);
     const reserveEvent = adminBookWithEventDto.events.find(event => event.eventType === BookEventType.RESERVE);
     return {
+      bookId: adminBookWithEventDto._id,
       title: adminBookWithEventDto.title,
       author: adminBookWithEventDto.author,
       isBorrowed: borrowEvent !== undefined,
@@ -122,5 +124,38 @@ export class AdminBookWithEventListComponent {
       this.filterForm.patchValue({ userId: undefined });
     }
   }
+
+  confirmReturnBook(book: DisplayAdminBookWithEventDto): any {
+    this.confirmationService.confirm({
+      header: 'Visszavétel megerősítése',
+      message: `Biztosan visszavezi a <strong>${book.borrowUserFullName}</strong> nál kintlévő <strong>${book.author}: ${book.title}</strong> című könyvet?`,
+      acceptLabel: 'Igen',
+      rejectLabel: 'Nem',
+      accept: () => this.returnBook(book)
+    });
+  }
+
+  async returnBook(book: DisplayAdminBookWithEventDto): Promise<void> {
+    await this.bookEventService.returnBookFor({ userId: book.borrowUserId, bookId: book.bookId });
+    this.filter();
+    this.messageService.add({ detail: `A <strong>${book.author}: ${book.title}</strong> című könyvet sikeresen visszavette <strong>${book.borrowUserFullName}</strong> tól.`, severity: 'success' });
+  }
+
+  confirmCancelReservation(book: DisplayAdminBookWithEventDto): any {
+    this.confirmationService.confirm({
+      header: 'Foglalás törlésének megerősítése',
+      message: `Biztosan törli <strong>${book.reserveUserFullName}</strong> foglalását a <strong>${book.author}: ${book.title}</strong> című könyvre?`,
+      acceptLabel: 'Igen',
+      rejectLabel: 'Nem',
+      accept: () => this.cancelReservation(book)
+    });
+  }
+
+  async cancelReservation(book: DisplayAdminBookWithEventDto): Promise<void> {
+    await this.bookEventService.cancelReservationFor({ userId: book.reserveUserId, bookId: book.bookId });
+    this.filter();
+    this.messageService.add({ detail: `<strong>${book.reserveUserFullName}</strong> foglalásást sikeresen törölte a <strong>${book.author}: ${book.title}</strong> című könyvre.`, severity: 'success' });
+  }
+
 
 }
