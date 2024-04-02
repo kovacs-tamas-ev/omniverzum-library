@@ -13,6 +13,7 @@ import { FilterBookDto } from "../models/book/filter-book.dto";
 import { BookEvent } from "../schemas/book-event.schema";
 import { Book } from "../schemas/book.schema";
 import { User } from "../schemas/user.schema";
+import { nullOutTimePart } from "src/utils/date-utils";
 
 @Injectable()
 export class BookService {
@@ -106,7 +107,7 @@ export class BookService {
     }
 
     async findBooksWithEventsForAdmin(filters: AdminBookWithEventFiltersDto): Promise<AdminBookWithEventDto[]> {
-        const bookIds = await this.findBookIdsForAdminQuery(filters.userId);
+        const bookIds = await this.findBookIdsForAdminQuery(filters.userId, filters.overDue);
         const booksWithEvents = await this.findBooksForAdminQuery(filters, bookIds);
         const adminBooksWithEvents = [];
         for (let bookWithEvent of booksWithEvents) {
@@ -117,11 +118,16 @@ export class BookService {
         return adminBooksWithEvents;
     }
 
-    private async findBookIdsForAdminQuery(userIdStr?: string): Promise<mongoose.Types.ObjectId[]> {
+    private async findBookIdsForAdminQuery(userIdStr: string, overDue: boolean): Promise<mongoose.Types.ObjectId[]> {
         const filterQuery = {} as FilterQuery<BookEvent>;
         if (userIdStr) {
             const userId = new mongoose.Types.ObjectId(userIdStr);
             filterQuery.userId = userId;
+        }
+
+        if (overDue) {
+            const currentDate = nullOutTimePart(new Date());
+            filterQuery.dueDate = { $lt: currentDate };
         }
 
         const resultDocs = await this.bookEventModel.find(filterQuery).exec();
@@ -132,7 +138,7 @@ export class BookService {
     private async findBooksForAdminQuery(filters: AdminBookWithEventFiltersDto, bookIds: mongoose.Types.ObjectId[]): Promise<BookWithEventDto[]> {
         const bookMatchQuery = {} as Record<string, any>;
 
-        const { userId, ...bookFilters } = filters;
+        const { userId, overDue, ...bookFilters } = filters;
         if (bookFilters && Object.keys(bookFilters).length > 0) {
             Object.keys(bookFilters).forEach(key => {
                 if (bookFilters[key] !== null && bookFilters[key] !== undefined) {

@@ -17,11 +17,12 @@ import { TooltipModule } from 'primeng/tooltip';
 import { UserDto } from '../../../models/user/user.dto';
 import { UserService } from '../../../user/services/user.service';
 import { AuthService } from '../../../auth/services/auth.service';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-admin-book-with-event-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, AutoCompleteModule, ButtonModule, TableModule, TooltipModule],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, AutoCompleteModule, ButtonModule, TableModule, TooltipModule, CheckboxModule],
   templateUrl: './admin-book-with-event-list.component.html',
   styleUrl: './admin-book-with-event-list.component.scss'
 })
@@ -52,6 +53,7 @@ export class AdminBookWithEventListComponent {
       title: [null],
       author: [null],
       userId: [null],
+      overDue: [null]
     });
   }
 

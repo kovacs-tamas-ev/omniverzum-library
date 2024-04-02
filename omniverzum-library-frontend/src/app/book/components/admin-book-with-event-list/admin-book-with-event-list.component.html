@@ -27,6 +27,7 @@
                                 [forceSelection]="true"></p-autoComplete>
                 <label for="userId">Könyvtári tag</label>
             </span>
+            <p-checkbox label="Lejárt kölcsönzések" formControlName="overDue" [binary]="true"></p-checkbox>
         </form>
         <div class="button-container">
             <p-button (onClick)="resetFilters()" icon="pi pi-delete-left" severity="danger" label="Szűrők törlése"></p-button>

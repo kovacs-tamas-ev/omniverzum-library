@@ -2,7 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    .p-float-label, p-triStateCheckbox {
+    .p-float-label, p-checkbox, p-triStateCheckbox {
         margin-right: 1rem;
         margin-bottom: 1.5rem;
     }
@@ -14,6 +14,6 @@
 }
 
 
-p-triStateCheckbox, p-checkbox {
+p-triStateCheckbox, p-checkbox, p-triStateCheckbox {
     width: 17.375rem;
 }

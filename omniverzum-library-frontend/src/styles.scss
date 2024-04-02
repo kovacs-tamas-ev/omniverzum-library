@@ -153,3 +153,9 @@ p-toast .custom-message {
 .whitespace-nowrap {
     white-space: nowrap;
 }
+
+p-autocomplete {
+    input {
+        padding-right: 12px;
+    }
+}
