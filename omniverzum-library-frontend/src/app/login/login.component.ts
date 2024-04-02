@@ -31,7 +31,9 @@ export class LoginComponent {
 
   async login() {
     await this.authService.login({ username: this.form.value.username, password: this.form.value.password });
-    this.router.navigate(['/profile']);
+    const isAdmin = this.authService.getUserData()?.admin;
+    const homeRoute = isAdmin ? '/admin/borrowed-books' : '/available-books';
+    this.router.navigate([homeRoute]);
   }
 
 }
