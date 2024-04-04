@@ -18,6 +18,8 @@ import { UserDto } from '../../../models/user/user.dto';
 import { UserService } from '../../../user/services/user.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { CheckboxModule } from 'primeng/checkbox';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-admin-book-with-event-list',
@@ -43,6 +45,7 @@ export class AdminBookWithEventListComponent {
               private authService: AuthService,
               private confirmationService: ConfirmationService,
               private bookEventService: BookEventService,
+              private http: HttpClient, // Just for the demo, remove it after
               private messageService: MessageService) {
     this.initForm();
     this.initUserSuggestions();
@@ -156,6 +159,17 @@ export class AdminBookWithEventListComponent {
     await this.bookEventService.cancelReservationFor({ userId: book.reserveUserId, bookId: book.bookId });
     this.filter();
     this.messageService.add({ detail: `<strong>${book.reserveUserFullName}</strong> foglalásást sikeresen törölte a <strong>${book.author}: ${book.title}</strong> című könyvre.`, severity: 'success' });
+  }
+
+  // Demo methods
+  async sendOverdueMails(): Promise<void> {
+    await firstValueFrom(this.http.get('api/email/send-overdue'));
+    this.filter();
+  }
+
+  async sendReserveAvailableMails(): Promise<void> {
+    await firstValueFrom(this.http.get('api/email/send-reserve-available'));
+    this.filter();
   }
 
 
