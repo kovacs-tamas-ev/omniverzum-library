@@ -8,7 +8,7 @@ export class EmailTestController {
 
     @Get('send')
     async sendEmail(): Promise<void> {
-        this.bookEventAutomailService.sendAllOverdueMails();
+        this.bookEventAutomailService.sendAllReserveAvailableMails();
     }
 
 }

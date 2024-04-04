@@ -61,6 +61,76 @@ export class BookEventAutomailService {
         return this.sendMailsAndSetUserNotified(bookEmailDtos);
     }
 
+    async sendAllReserveAvailableMails(): Promise<void> {
+        const reserveAvailableEvents = await this.bookEventModel.aggregate([
+            {
+                $match: {
+                    eventType: BookEventType.RESERVE,
+                    userNotified: false
+                }
+            },
+            {
+                $lookup: {
+                    from: "books",
+                    localField: "bookId",
+                    foreignField: "_id",
+                    as: "book"
+                }
+            },
+            {
+                $unwind: "$book"
+            },
+            {
+                $lookup: {
+                    from: "bookevents",
+                    let: { bookId: "$book._id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$bookId", "$$bookId"] },
+                                        { $eq: ["$eventType", BookEventType.BORROW] }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    as: "borrowEvents"
+                }
+            },
+            {
+                $match: {
+                    "borrowEvents": { $size: 0 } // Csak ahol nincs BORROW típusú esemény
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $unwind: "$user"
+            },
+            {
+                $project: {
+                    _id: 1,
+                    author: "$book.author",
+                    title: "$book.title",
+                    userFullName: "$user.fullName",
+                    eventType: 1,
+                    targetEmail: "$user.email"
+                }
+            }
+        ]);
+    
+        const bookEmailDtos = mapAllToClass(BookEmailDto, reserveAvailableEvents);
+        return this.sendMailsAndSetUserNotified(bookEmailDtos);
+    }
+
     private async sendMailsAndSetUserNotified(bookEmailDtos: BookEmailDto[]): Promise<void> {
         for (let dto of bookEmailDtos) {
             const sentSuccessfully = await this.emailService.sendEmail(dto);
