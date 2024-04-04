@@ -18,6 +18,7 @@ import { ImportFromFileService } from './services/import-from-file.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailTestController } from './controllers/email-test.controller';
 import { EmailService } from './services/email.service';
+import { BookEventAutomailService } from './services/book-event-automail.service';
 
 @Module({
     imports: [
@@ -52,6 +53,7 @@ import { EmailService } from './services/email.service';
       BookEventService,
       ImportFromFileService,
       EmailService,
+      BookEventAutomailService,
       {
         provide: APP_FILTER,
         useClass: ServerExceptionFilter,

@@ -1,11 +1,13 @@
+import mongoose from "mongoose";
 import { BookEventType } from "../book-event/book-event-type";
 
 export class BookEmailDto {
 
-    author: string;
-    title: string;
-    userFullName: string;
-    eventType: BookEventType;
-    targetEmail: string;
+    _id: mongoose.Types.ObjectId = undefined;
+    author: string = undefined;
+    title: string = undefined;
+    userFullName: string = undefined;
+    eventType: BookEventType = undefined;
+    targetEmail: string = undefined;
 
 }
