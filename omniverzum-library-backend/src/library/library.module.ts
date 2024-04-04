@@ -15,6 +15,9 @@ import { BookEventController } from './controllers/book-event.controller';
 import { BookEventService } from './services/book-event.service';
 import { UploadController } from './controllers/upload.controller';
 import { ImportFromFileService } from './services/import-from-file.service';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { EmailTestController } from './controllers/email-test.controller';
+import { EmailService } from './services/email.service';
 
 @Module({
     imports: [
@@ -31,7 +34,16 @@ import { ImportFromFileService } from './services/import-from-file.service';
               name: BookEvent.name,
               schema: BookEventSchema
             }
-          ]),      
+          ]),
+          MailerModule.forRoot({
+            transport: {
+              host: 'smtp.gmail.com',
+              auth: {
+                user: 'kovacs.tamas.ev91@gmail.com',
+                pass: 'rzhq ozvq caer yeck'
+              }
+            }
+          }),
         AuthModule
     ],
     providers: [
@@ -39,6 +51,7 @@ import { ImportFromFileService } from './services/import-from-file.service';
       BookService,
       BookEventService,
       ImportFromFileService,
+      EmailService,
       {
         provide: APP_FILTER,
         useClass: ServerExceptionFilter,
@@ -48,6 +61,6 @@ import { ImportFromFileService } from './services/import-from-file.service';
         useClass: ServerResponseInterceptor
       }
     ],
-    controllers: [UserController, BookController, BookEventController, UploadController]
+    controllers: [UserController, BookController, BookEventController, UploadController, EmailTestController]
 })
 export class LibraryModule {}
