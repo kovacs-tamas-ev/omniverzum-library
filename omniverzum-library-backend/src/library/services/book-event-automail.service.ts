@@ -7,12 +7,15 @@ import { BookEmailDto } from "../models/book/book-email.dto";
 import { BookEvent } from "../schemas/book-event.schema";
 import { EmailService } from "./email.service";
 import { mapAllToClass } from "src/utils/mappers";
+import { Cron } from "@nestjs/schedule";
+import { log } from "console";
 
 @Injectable()
 export class BookEventAutomailService {
 
     constructor(@InjectModel(BookEvent.name) private bookEventModel: Model<BookEvent>, private emailService: EmailService) {}
 
+    @Cron('0 9 * * *')
     async sendAllOverdueMails(): Promise<void> {
         const startOfToday = nullOutTimePart(new Date());
         const overdueEvents = await this.bookEventModel.aggregate([
@@ -61,6 +64,7 @@ export class BookEventAutomailService {
         return this.sendMailsAndSetUserNotified(bookEmailDtos);
     }
 
+    @Cron('0 9 * * *')
     async sendAllReserveAvailableMails(): Promise<void> {
         const reserveAvailableEvents = await this.bookEventModel.aggregate([
             {

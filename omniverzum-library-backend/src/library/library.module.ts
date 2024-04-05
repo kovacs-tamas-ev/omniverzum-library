@@ -19,6 +19,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailTestController } from './controllers/email-test.controller';
 import { EmailService } from './services/email.service';
 import { BookEventAutomailService } from './services/book-event-automail.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -45,6 +46,7 @@ import { BookEventAutomailService } from './services/book-event-automail.service
               }
             }
           }),
+        ScheduleModule.forRoot(),
         AuthModule
     ],
     providers: [
