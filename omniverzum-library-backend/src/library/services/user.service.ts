@@ -25,7 +25,8 @@ export class UserService {
             ...userData,
             password: hashedPassword,
             username: userData.email,
-            membershipStart: new Date()
+            membershipStart: new Date(),
+            deleted: false
         };
         
         const newUser = new this.userModel(userDataToSave);
@@ -34,6 +35,7 @@ export class UserService {
 
     async findUsers(filters?: FilterUserDto): Promise<UserDto[]> {
         const filterQuery = {} as FilterQuery<User>;
+        filterQuery.deleted = false;
 
         if (filters && Object.keys(filters).length > 0) {
             const mappedFilters = mapToClass(FilterUserDto, filters);
@@ -127,7 +129,7 @@ export class UserService {
 
     async deleteUser(userId: string): Promise<void> {
         validateObjectId(userId, 'Érvénytelen felhasználó azonosító');
-        await this.userModel.findByIdAndDelete(userId);
+        await this.userModel.findByIdAndUpdate(userId, { deleted: true });
     }
     
     async changePassword(userId: string, changePasswordDto: ChangePasswordDto): Promise<void> {
@@ -160,7 +162,7 @@ export class UserService {
         if (existingUser.admin) {
             await this.validateIfLastAdmin();
         }
-        await this.userModel.findByIdAndDelete(userId);
+        await this.userModel.findByIdAndUpdate(userId, { deleted: true });
     }
 
     private async validateIfLastAdmin(): Promise<void> {

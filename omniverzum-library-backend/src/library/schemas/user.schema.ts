@@ -27,6 +27,9 @@ export class User {
     @Prop({ default: false })
     admin: boolean;
 
+    @Prop({ default: false })
+    deleted: boolean;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

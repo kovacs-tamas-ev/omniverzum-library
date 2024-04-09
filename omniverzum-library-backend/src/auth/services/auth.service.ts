@@ -20,6 +20,7 @@ export class AuthService {
     async validateUser(authPayloadDto: LoginPayloadDto): Promise<LoginResponseDto | null> {
         const filterQuery = {} as FilterQuery<User>;
         filterQuery.username = authPayloadDto.username;
+        filterQuery.deleted = false;
 
         const resultDocs = await this.userModel.find(filterQuery).exec();
         if (resultDocs.length !== 1) {
@@ -39,6 +40,7 @@ export class AuthService {
 
     async findUserOwnData(_id: string): Promise<UserDto> {
         const filterQuery = { _id } as FilterQuery<User>;
+        filterQuery.deleted = false;
         const resultDoc = await this.userModel.findOne(filterQuery).lean().exec();
 
         if (resultDoc === null) {
