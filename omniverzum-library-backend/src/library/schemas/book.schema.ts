@@ -8,22 +8,22 @@ export class Book {
     @Prop({ unique: true, required: true })
     inventoryNumber: number;
 
-    @Prop({ unique: true, required: true })
+    @Prop()
     isbn: string;
 
-    @Prop({ required: true })
+    @Prop()
     title: string;
 
-    @Prop({ required: true })
+    @Prop()
     author: string;
 
-    @Prop({ required: true })
+    @Prop()
     publisher: string;
 
-    @Prop({ required: true })
+    @Prop()
     genre: string;
 
-    @Prop({ required: true })
+    @Prop()
     subjectArea: string;
 }
 
